@@ -1,0 +1,19 @@
+# Ignore Odoo log and temp files
+*.pyc
+*.pyo
+*.swp
+*.log
+__pycache__/
+.idea/
+.vscode/
+*.egg-info/
+*.pot
+*.mo
+*.db
+*.sqlite3
+*.swp
+*.bak
+*.tmp
+*.DS_Store
+*.~lock.*
+addons/.gitkeep
