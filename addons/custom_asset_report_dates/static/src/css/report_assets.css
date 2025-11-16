@@ -1,0 +1,37 @@
+/*
+ * FINAL ATTEMPT: Aggressive CSS for the Depreciation Schedule PDF.
+ * This applies smaller fonts and forces table layout properties with !important.
+ */
+@media print {
+    .o_account_reports_body[data-report-model="account.asset.report"] {
+        /* Further reduce the font size for the entire report body */
+        font-size: 8px !important;
+    }
+
+    .o_account_reports_body[data-report-model="account.asset.report"] .o_account_reports_table,
+    .o_account_reports_body[data-report-model="account.asset.report"] .o_account_reports_table thead,
+    .o_account_reports_body[data-report-model="account.asset.report"] .o_account_reports_table tbody,
+    .o_account_reports_body[data-report-model="account.asset.report"] .o_account_reports_table tr {
+        /* Force the table and its main components to use 100% width */
+        width: 100% !important;
+        table-layout: fixed !important;
+    }
+
+    .o_account_reports_body[data-report-model="account.asset.report"] .o_account_reports_table th,
+    .o_account_reports_body[data-report-model="account.asset.report"] .o_account_reports_table td {
+        /* Allow text to wrap and break words */
+        white-space: normal !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important; /* Modern equivalent for word-wrap */
+        
+        /* Reduce padding to the minimum */
+        padding: 1px 2px !important;
+    }
+
+    /* Target the problematic Book Value column specifically if possible */
+    .o_account_reports_body[data-report-model="account.asset.report"] .o_account_reports_table th[data-expression-label="balance"],
+    .o_account_reports_body[data-report-model="account.asset.report"] .o_account_reports_table td[data-expression-label="balance"] {
+        /* Give it a bit more width if possible, or just ensure it wraps */
+        width: auto !important; /* Let it take available space */
+    }
+}
