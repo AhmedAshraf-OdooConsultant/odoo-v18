@@ -1,0 +1,150 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* inventory_age_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 16.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-03-31 17:26+0000\n"
+"PO-Revision-Date: 2024-03-31 17:26+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report__age_breakdown_days
+msgid "Age Breakdown Days"
+msgstr "معدل عمر الدين"
+
+#. module: inventory_age_report
+#: model:ir.model,name:inventory_age_report.model_report_inventory_age_report_report_inventory_breakdown
+msgid "Age Breakdown Report"
+msgstr "معدل أعمار الديون للأصناف"
+
+#. module: inventory_age_report
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.report_inventory_breakdown
+msgid "CATEGORY"
+msgstr "الفئة"
+
+#. module: inventory_age_report
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.inventory_age_breakdown_report_view_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report__company_ids
+msgid "Company"
+msgstr "الشركة"
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: inventory_age_report
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.inventory_age_breakdown_report_view_form
+msgid "EXCEL"
+msgstr ""
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report__id
+msgid "ID"
+msgstr ""
+
+#. module: inventory_age_report
+#: model:ir.actions.act_window,name:inventory_age_report.inventory_age_breakdown_report_action
+#: model:ir.actions.report,name:inventory_age_report.report_inventory_age_breakdown_action
+#: model:ir.model,name:inventory_age_report.model_inventory_age_breakdown_report
+#: model:ir.ui.menu,name:inventory_age_report.inventory_age_breakdown_report_menu
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.report_inventory_breakdown
+msgid "Inventory Age Report"
+msgstr "معدل أعمار الديون للأصناف"
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report____last_update
+msgid "Last Modified on"
+msgstr ""
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: inventory_age_report
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.inventory_age_breakdown_report_view_form
+msgid "PDF"
+msgstr ""
+
+#. module: inventory_age_report
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.report_inventory_breakdown
+msgid "PRODUCT"
+msgstr "الصنف"
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report__category_ids
+msgid "Product Categories"
+msgstr "فئات الأصناف"
+
+#. module: inventory_age_report
+#: model:ir.model.fields,field_description:inventory_age_report.field_inventory_age_breakdown_report__product_ids
+msgid "Products"
+msgstr "الأصناف"
+
+#. module: inventory_age_report
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.report_inventory_breakdown
+msgid "STOCK"
+msgstr "الكمية"
+
+#. module: inventory_age_report
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.report_inventory_breakdown
+msgid "STOCK VALUE"
+msgstr "قيمة الكمية"
+
+#. module: inventory_age_report
+#: model:ir.model.fields,help:inventory_age_report.field_inventory_age_breakdown_report__company_ids
+msgid "Select the companies you want to generate the report for"
+msgstr "إختيار الشركاة"
+
+#. module: inventory_age_report
+#: model:ir.model.fields,help:inventory_age_report.field_inventory_age_breakdown_report__category_ids
+msgid "Select the product categories you want to generate the report for"
+msgstr "إختيار الفئات"
+
+#. module: inventory_age_report
+#: model:ir.model.fields,help:inventory_age_report.field_inventory_age_breakdown_report__product_ids
+msgid "Select the products you want to generate the report for"
+msgstr "إختيار الأصناف"
+
+#. module: inventory_age_report
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.report_inventory_breakdown
+msgid "Sl.no"
+msgstr "رقم"
+
+#. module: inventory_age_report
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.report_inventory_breakdown
+msgid "TOTAL STOCK"
+msgstr "إجمالي الكمية"
+
+#. module: inventory_age_report
+#: model_terms:ir.ui.view,arch_db:inventory_age_report.report_inventory_breakdown
+msgid "VALUE"
+msgstr "القيمة"
