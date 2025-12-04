@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+    <t t-name="extra_account_report.UnknownPartnerFilterExtraOptions" t-inherit="account_reports.AccountReportFilterExtraOptions">
+        <xpath expr="//Dropdown/t[@t-set-slot='content']" position="inside">
+<!--        <xpath expr="//div[contains(@class, 'dropdown-divider')]" position="before">-->
+            <t t-if="controller.filters.show_hide_unknown_partner_lines !== 'never'">
+                <DropdownItem
+                        class="{ 'selected': controller.options.hide_unknown_partner_lines}"
+                        onSelected="() => this.toggleHideUnknownPartnerLines()"
+                >
+                    Hide Lines with Unknown partner
+                </DropdownItem>
+            </t>
+        </xpath>
+    </t>
+</templates>
