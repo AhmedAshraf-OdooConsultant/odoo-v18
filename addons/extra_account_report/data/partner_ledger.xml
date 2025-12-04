@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-    <odoo>
-    <record id="partner_ledger_report_inherited" model="account.report">
-        <field name="name">Partner Ledger Report Inherited</field>
-        <field name="root_report_id" ref="account_reports.partner_ledger_report" />
-        <field name="filter_hide_unknown_partner_lines">never</field>
-    </record>
-</odoo>
