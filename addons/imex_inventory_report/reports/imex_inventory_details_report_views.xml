@@ -1,0 +1,237 @@
+<?xml version='1.0' encoding='utf-8'?>
+<odoo>
+    <record id="action_imex_inventory_details_report_html" model="ir.actions.report">
+        <field name="name">Stock Cart Report</field>
+        <field name="model">imex.inventory.details.report</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">imex_inventory_report.imex_inventory_details_report_html</field>
+        <field name="report_file">imex_inventory_report.imex_inventory_details_report_html</field>
+    </record>
+
+    <record id="imex_inventory_details_report_tree" model="ir.ui.view">
+        <field name="name">Stock Cart Report tree</field>
+        <field name="model">imex.inventory.details.report</field>
+        <field name="arch" type="xml">
+            <list string="Stock Cart Report" create="0" edit="0" delete="0" action="action_ref_picking"
+                  type="object" limit="30">
+
+                <field name="currency_id" invisible="1"  optional="hide"/>
+                <field name="product_barcode" optional="hide"/>
+                <field name="product_id" optional="show"/>
+                <field name="product_category" optional="hide"/>
+                <field name="product_default_code" optional="hide"/>
+                <field name="date" widget="date"/>
+                <field name="display_name" string="Refrence"/>
+                <field name="partner_id"/>
+                <field name="location_id"/>
+                <field name="location_dest_id"/>
+                <field name="main_product_uom_id" optional="show"/>
+                <field name="unit_cost" string="Price" optional="show"/>
+                <field name="product_in" string="In" optional="show" sum="Total product In"/>
+                <field name="product_out" string="Out" optional="show" sum="Total Product Out"/>
+                <field name="transaction_value" optional="show" sum="Total Transaction Value"/>
+                <field name="product_balance"/>
+                <field name="product_amount" sum="Total Product Amount"/>
+                <field name="initial" optional="hide"/>
+                <field name="initial_amount" optional="hide"/>
+                <field name="origin" optional="hide"/>
+                <field name="picking_id" optional="hide"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="imex_inventory_details_report_search" model="ir.ui.view">
+        <field name="name">Stock Cart Report search</field>
+        <field name="model">imex.inventory.details.report</field>
+        <field name="arch" type="xml">
+            <search string="Stock Cart Report">
+                <field name="reference" string="Refrence"/>
+                <field name="product_id"/>
+                <field name="partner_id"/>
+                <field name="location_id"/>
+                <field name="location_dest_id"/>
+                <group expand="1" string="Group By">
+                    <filter string="Product" name="product_id" context="{'group_by':'product_id'}"/>
+                    <filter string="Partner" name="partner_id" context="{'group_by':'partner_id'}"/>
+                    <filter string="Src location" name="location_id" context="{'group_by':'location_id'}"/>
+                    <filter string="Dest location" name="location_dest_id" context="{'group_by':'location_dest_id'}"/>
+                    <separator orientation="vertical"/>
+                    <filter string="Date" name="date" context="{'group_by':'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <template id="imex_inventory_details_report_html">
+        <!-- <t t-call="imex_inventory_report.report_buttons"/> -->
+        <t t-call="web.html_container">
+            <t t-call="imex_inventory_report.custom_layout_mhamed">
+                <t t-set="docs" t-value="env['imex.inventory.details.report'].browse(detail_ids)"/>
+                <div>
+                    <link href="/imex_inventory_report/static/src/css/report.css" rel="stylesheet"/>
+                    <t t-call="imex_inventory_report.report_imex_inventory_details_report_base"/>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_buttons">
+        <button class="o_imex_inventory_reports_print btn btn-sm oe_button">
+            <span class="fa fa-print"/>
+            Print
+        </button>
+        <button class="o_imex_inventory_reports_export btn btn-sm oe_button">
+            <span class="fa fa-fa-file-excel-o"/>
+            Export
+        </button>
+    </template>
+
+    <!-- Base Report Template -->
+    <template id="report_imex_inventory_details_report_base">
+        <div class="page">
+            <div class="row">
+                <h4 class="mt0" style="text-align: center;">
+                    <span>Stock Cart Report</span>
+                </h4>
+
+            </div>
+            <t t-call="imex_inventory_report.report_imex_inventory_details_report_filters"/>
+            <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; table-layout: fixed; font-size: 9px;">
+                <t t-call="imex_inventory_report.report_imex_inventory_details_lines_header"/>
+                <tbody>
+                    <t t-set="line_initial" t-value="docs.filtered(lambda l: not l.product_id)"/>
+                    <t t-set="lines" t-value="docs.filtered(lambda l: l.product_id)"/>
+                    <t t-set="product_balance" t-value="line_initial[0].initial"/>
+                    <t t-set="product_amount" t-value="line_initial[0].initial_amount"/>
+                    <tr>
+                        <td style="padding: 6px 8px; border: 1px solid #dee2e6; width: 3%; font-size: 9px; vertical-align: top; text-align: center;">0</td>
+                        <td style="padding: 6px 8px; border: 1px solid #dee2e6; width: 12%; font-size: 9px; vertical-align: top; text-align: center;" colspan="10">Initial</td>
+                        <td style="padding: 6px 8px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; vertical-align: top; white-space: nowrap;">
+                            <t t-out="'{0:,.2f}'.format(line_initial[0].initial)"/>
+                        </td>
+                        <td style="padding: 6px 8px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; vertical-align: top; white-space: nowrap;">
+                            <span t-field="line_initial[0].initial_amount" t-field-options='{"widget": "monetary", "display_currency": line_initial[0].currency_id}'/>
+                        </td>
+                    </tr>
+                    <t t-foreach="lines" t-as="product_line">
+                        <t t-set="product_balance" t-value="product_balance + product_line.product_in - product_line.product_out"/>
+                        <t t-set="product_amount" t-value="product_amount + product_line.product_in * product_line.unit_cost - product_line.product_out * product_line.unit_cost"/>
+                        <t t-call="imex_inventory_report.report_imex_inventory_details_lines"/>
+                    </t>
+                </tbody>
+            </table>
+            <p style="page-break-before:always;"/>
+        </div>
+    </template>
+
+    <!-- Filter Template - Using table with matching width -->
+    <template id="imex_inventory_report.report_imex_inventory_details_report_filters">
+        <table style="width: 100%; border-collapse: collapse; border: 1px solid #dee2e6; margin-bottom: 16px; table-layout: fixed; font-size: 9px;">
+            <thead>
+                <tr style="background-color: #f8f9fa;">
+                    <th style="padding: 8px; border: 1px solid #dee2e6; width: 25%; text-align: center; font-size: 9px; font-weight: bold;">Date From</th>
+                    <th style="padding: 8px; border: 1px solid #dee2e6; width: 25%; text-align: center; font-size: 9px; font-weight: bold;">Date To</th>
+                    <th style="padding: 8px; border: 1px solid #dee2e6; width: 25%; text-align: center; font-size: 9px; font-weight: bold;">Location</th>
+                    <th style="padding: 8px; border: 1px solid #dee2e6; width: 25%; text-align: center; font-size: 9px; font-weight: bold;">Category</th>
+                    <th style="padding: 8px; border: 1px solid #dee2e6; width: 25%; text-align: center; font-size: 9px; font-weight: bold;">Product</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; width: 25%; font-size: 9px; vertical-align: top; text-align: center;">
+                        <span t-if="date_from != '1900-01-01'" t-out="date_from"/>
+                    </td>
+                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; width: 25%; font-size: 9px; vertical-align: top; text-align: center;">
+                        <span t-if="date_to != datetime.date.today().strftime('%Y-%m-%d')" t-out="date_to"/>
+                    </td>
+                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; width: 25%; font-size: 9px; vertical-align: top; text-align: center;">
+                        <span t-if="location">
+                            <t t-out="location"/>
+                        </span>
+                        <span t-else="">All stocks</span>
+                    </td>
+                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; width: 25%; font-size: 9px; vertical-align: top; text-align: center;">
+                        <span t-if="category" t-out="category"/>
+                    </td>
+                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; width: 25%; font-size: 12px; vertical-align: top; text-align: center;">
+                        <t t-out="product_name"/>
+                          <t t-if="product_default_code">
+                             [<t t-out="product_default_code"/>]
+                        </t>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </template>
+
+    <!-- Header Template - Using thead with fixed widths -->
+    <template id="imex_inventory_report.report_imex_inventory_details_lines_header">
+        <thead>
+            <tr style="background-color: #f8f9fa;">
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 3%; font-size: 9px; font-weight: bold; vertical-align: middle;">#</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; font-weight: bold; vertical-align: middle;">Date</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 12%; font-size: 9px; font-weight: bold; vertical-align: middle;">Reference</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 10%; font-size: 9px; font-weight: bold; vertical-align: middle;">Partner</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 10%; font-size: 9px; font-weight: bold; vertical-align: middle;">Source Location</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 10%; font-size: 9px; font-weight: bold; vertical-align: middle;">Dest Location</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 8%; font-size: 9px; font-weight: bold; vertical-align: middle;">Price</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 5%; font-size: 9px; font-weight: bold; vertical-align: middle;">UOM</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; font-weight: bold; vertical-align: middle;">In</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; font-weight: bold; vertical-align: middle;">Out</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; font-weight: bold; vertical-align: middle;">Total Value</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; font-weight: bold; vertical-align: middle;">Balance</th>
+                <th style="padding: 8px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; font-weight: bold; vertical-align: middle;">Amount</th>
+            </tr>
+        </thead>
+    </template>
+
+    <!-- Data Lines Template - Using tr with matching widths -->
+    <template id="imex_inventory_report.report_imex_inventory_details_lines">
+        <tr>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 3%; font-size: 9px; vertical-align: top; white-space: nowrap;">
+                <t t-out="product_line_index + 1"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; vertical-align: top;">
+                <t t-out="product_line.date"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 12%; font-size: 9px; vertical-align: top; word-wrap: break-word; overflow-wrap: break-word;">
+                <t t-out="product_line.display_name"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 10%; font-size: 9px; vertical-align: top;">
+                <t t-out="product_line.picking_id.partner_id.name"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 10%; font-size: 9px; vertical-align: top;">
+                <t t-out="product_line.location_id.complete_name"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 10%; font-size: 9px; vertical-align: top;">
+                <t t-out="product_line.location_dest_id.complete_name"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 8%; font-size: 9px; vertical-align: top; white-space: nowrap;">
+                <span t-field="product_line.unit_cost"/>
+                <span t-out="product_line.currency_id.symbol"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 5%; font-size: 9px; vertical-align: top;">
+                <t t-out="product_line.main_product_uom_id.display_name"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; vertical-align: top; white-space: nowrap;">
+                <t t-out="'{0:,.2f}'.format(product_line.product_in)"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; vertical-align: top; white-space: nowrap;">
+                <t t-out="'{0:,.2f}'.format(product_line.product_out)"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; vertical-align: top; white-space: nowrap;">
+                <span t-field="product_line.transaction_value"
+                      t-field-options='{"widget": "monetary", "display_currency": product_line.currency_id}'/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; vertical-align: top; white-space: nowrap;">
+                <t t-out="'{0:,.2f}'.format(product_balance)"/>
+            </td>
+            <td style="padding: 6px 4px; border: 1px solid #dee2e6; text-align: center; width: 7%; font-size: 9px; vertical-align: top; white-space: nowrap;">
+                <span t-field="product_line.product_amount"
+                      t-field-options='{"widget": "monetary", "display_currency": product_line.currency_id}'/>
+            </td>
+        </tr>
+    </template>
+
+
+</odoo>

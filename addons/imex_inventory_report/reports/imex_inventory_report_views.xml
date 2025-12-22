@@ -1,0 +1,218 @@
+<odoo>
+
+    <record id="view_imex_inventory_report_search" model="ir.ui.view">
+        <field name="name">imex.inventory.report.search</field>
+        <field name="model">imex.inventory.report</field>
+        <field name="arch" type="xml">
+            <search string="Stock Cart Report Search">
+                <field name="product_id" string="Product"/>
+                <field name="product_category" string="Category"/>
+                <field name="location" string="Location"/>
+                <separator/>
+                <filter name="balance" string="In stock" domain="[('balance','!=',0)]"/>
+                <filter name="not_balance" string="Out of stock" domain="[('balance','=',0)]"/>
+                <separator/>
+                <filter name="imex" string="SCR Qty" domain="['|',('product_in','!=',0),('product_out','!=',0)]"/>
+                <filter name="not_imex" string="Not SCR Qty" domain="[('product_in','=',0),('product_out','=',0)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Product" name="product_id" domain="[]" context="{'group_by': 'product_id'}"/>
+                    <filter string="Category" name="product_category" domain="[]" context="{'group_by': 'product_category'}"/>
+                    <filter string="Location" name="location" domain="[]" context="{'group_by': 'location'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_imex_inventory_report_tree" model="ir.ui.view">
+        <field name="name">imex.inventory.report.list</field>
+        <field name="model">imex.inventory.report</field>
+        <field name="arch" type="xml">
+            <list create="false" string="Stock Cart Report">
+                 <field name="company_currency_id" column_invisible="True"/>
+                <field name="product_barcode" optional="show"/>
+                <field name="product_default_code" optional="show"/>
+                <field name="product_id" string="Product"/>
+                <field name="product_standard_price" optional="show"/>
+                <field name="product_list_price" optional="show"/>
+                <field name="product_uom_id" string="UoM" optional="show"/>
+                <field name="product_category" string="Category" optional="show"/>
+                <field name="location" string="Location" optional="show"/>
+                <field name="initial" string="Initial" optional="show" sum="Total Initial"/>
+                <field name="initial_amount" string="Initial Amount" optional="show" sum="Total Initial Amount"/>
+                <field name="product_in" string="Total Qty In" optional="show" sum="Total Qty In"/>
+                <field name="product_in_amount" string="Total Amount In" optional="show" sum="Total Amount In"/>
+                <field name="product_out" string="Total Qty Out" optional="show" sum="Total Qty out"/>
+                <field name="product_out_amount" string="Total Amount Out" optional="show" sum="Total Out Amount"/>
+                <field name="balance" string="Balance" optional="show" sum="Total Balance"/>
+                <field name="line_value" sum="Total Value" optional="show"/>
+                <field name="amount" string="Amount" optional="show" sum="Total Amount"/>
+                <button name="report_details" type="object" class="fa fa-search"/>
+                <button name="button_tree_view" type="object" class="fa fa-list"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_imex_inventory_report_tree_view" model="ir.actions.act_window">
+        <field name="name">Stock Cart Report</field>
+        <field name="res_model">imex.inventory.report</field>
+        <field name="search_view_id" ref="view_imex_inventory_report_search" />
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="action_imex_inventory_report_pdf" model="ir.actions.report">
+        <field name="name">Print Stock Cart Report</field>
+        <field name="model">imex.inventory.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">imex_inventory_report.imex_inventory_report_pdf</field>
+        <field name="report_file">imex_inventory_report.imex_inventory_report_pdf</field>
+        <field name="print_report_name">'Stock Cart Report'</field>
+        <field name="binding_model_id" ref="model_imex_inventory_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="imex_inventory_report_pdf">
+        <t t-call="web.html_container">
+            <t t-call="imex_inventory_report.custom_layout_mhamed">
+                <div>
+                    <table class="data_table table table-bordered"
+                           style="width: 100%; font-size: 10px; border-collapse: collapse; border: 1px solid #dee2e6; white-space: nowrap;"
+                           name="report_table">
+                        <thead>
+                            <tr class="text-center" style="background-color: #f8f9fa;">
+                                <th rowspan="2" style="padding: 8px; border: 1px solid #dee2e6; vertical-align: middle; white-space: nowrap;" class="text-center" >
+                                    <span>#</span>
+                                </th>
+                                <th rowspan="2" style="padding: 8px; border: 1px solid #dee2e6; vertical-align: middle; white-space: nowrap;" class="text-center" >
+                                    <span>Barcode</span>
+                                </th>
+                                <th rowspan="2" style="padding: 8px; border: 1px solid #dee2e6; vertical-align: middle; white-space: nowrap;" class="text-center" >
+                                    <span>Product Code</span>
+                                </th>
+                                <th rowspan="2" style="padding: 8px; border: 1px solid #dee2e6; vertical-align: middle; white-space: nowrap;" class="text-center" >
+                                    <span>Product Name</span>
+                                </th>
+                                <th rowspan="2" style="padding: 8px; border: 1px solid #dee2e6; vertical-align: middle; white-space: nowrap;" class="text-center" >
+                                    <span>Cost</span>
+                                </th>
+                                <th rowspan="2" style="padding: 8px; border: 1px solid #dee2e6; vertical-align: middle; white-space: nowrap;" class="text-center" >
+                                    <span>Sales Price</span>
+                                </th>
+                                <th rowspan="2" style="padding: 8px; border: 1px solid #dee2e6; vertical-align: middle; white-space: nowrap;" class="text-center" >
+                                    <span>UoM</span>
+                                </th>
+                                <th rowspan="2" style="padding: 8px; border: 1px solid #dee2e6; vertical-align: middle; white-space: nowrap;" class="text-center" >
+                                    <span>Category</span>
+                                </th>
+                                <th rowspan="2" style="padding: 8px; border: 1px solid #dee2e6; vertical-align: middle; white-space: nowrap;" class="text-center" >
+                                    <span>Location</span>
+                                </th>
+                                <th colspan="2" class="text-center" style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;">
+                                    <span>Initial</span>
+                                </th>
+                                <th colspan="2" class="text-center" style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;">
+                                    <span>Total In</span>
+                                </th>
+                                <th colspan="2" class="text-center" style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;">
+                                    <span>Total Out</span>
+                                </th>
+                                <th colspan="2" class="text-center" style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;">
+                                    <span>Balance</span>
+                                </th>
+                            </tr>
+                            <tr class="text-center" style="background-color: #f8f9fa;">
+                                <th style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                    <span>Qty</span>
+                                </th>
+                                <th style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                    <span>Amount</span>
+                                </th>
+                                <th style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                    <span>Qty</span>
+                                </th>
+                                <th style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                    <span>Amount</span>
+                                </th>
+                                <th style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                    <span>Qty</span>
+                                </th>
+                                <th style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                    <span>Amount</span>
+                                </th>
+                                <th style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                    <span>Qty</span>
+                                </th>
+                                <th style="padding: 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                    <span>Amount</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="line">
+                                <tr>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; text-align: center; white-space: nowrap;" class="text-center">
+                                        <t t-out="line_index + 1"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="line.product_id.barcode"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="line.product_id.default_code"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="line.product_id.name"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="'{0:,.2f}'.format(line.product_id.standard_price)"/>
+                                        <t t-out="line.product_id.currency_id.symbol or env.company.currency_id.symbol"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="'{0:,.2f}'.format(line.product_id.list_price)"/>
+                                        <t t-out="line.product_id.currency_id.symbol or env.company.currency_id.symbol"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="line.product_uom_id.name"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="line.product_category.complete_name"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="line.location.complete_name"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="'{0:,.2f}'.format(line.initial)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="'{0:,.2f}'.format(line.initial_amount)"/>
+                                        <t t-out="env.company.currency_id.symbol"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="'{0:,.2f}'.format(line.product_in)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="'{0:,.2f}'.format(line.product_in_amount)"/>
+                                        <t t-out="env.company.currency_id.symbol"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="'{0:,.2f}'.format(line.product_out)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="'{0:,.2f}'.format(line.product_out_amount)"/>
+                                        <t t-out="env.company.currency_id.symbol"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="'{0:,.2f}'.format(line.balance)"/>
+                                    </td>
+                                    <td style="padding: 6px 8px; border: 1px solid #dee2e6; white-space: nowrap;" class="text-center">
+                                        <t t-out="'{0:,.2f}'.format(line.amount)"/>
+                                        <t t-out="env.company.currency_id.symbol"/>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+
+</odoo>

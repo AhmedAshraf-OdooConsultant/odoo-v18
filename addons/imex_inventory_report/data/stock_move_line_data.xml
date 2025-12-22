@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <!-- Server Action: Compute Main Product Qty -->
+    <record id="stock_compute_main_product_qty" model="ir.actions.server">
+        <field name="name">Compute Main Product Qty</field>
+        <field name="model_id" ref="model_stock_move_line"/>
+        <field name="binding_model_id" ref="model_stock_move_line"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+        <field name="state">code</field>
+        <field name="usage">ir_actions_server</field>
+        <field name="help">Compute the main product quantity for selected move lines.</field>
+        <field name="code">
+            if records:
+                records._compute_main_product_qty()
+        </field>
+    </record>
+
+    <!-- Server Action: Compute Internal Transfer Data -->
+    <record id="stock_compute_internal_transfer_data" model="ir.actions.server">
+        <field name="name">Compute Internal Transfer Data</field>
+        <field name="model_id" ref="model_stock_move_line"/>
+        <field name="binding_model_id" ref="model_stock_move_line"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="groups_id" eval="[(4, ref('stock.group_stock_manager'))]"/>
+        <field name="state">code</field>
+        <field name="usage">ir_actions_server</field>
+        <field name="help">Compute internal transfer data for selected stock move lines.</field>
+        <field name="code">
+            if records:
+                records._compute_internal_transfer_data()
+        </field>
+    </record>
+
+</odoo>

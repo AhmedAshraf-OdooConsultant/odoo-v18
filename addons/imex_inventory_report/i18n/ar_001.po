@@ -1,0 +1,718 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* imex_inventory_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-12-08 23:46+0000\n"
+"PO-Revision-Date: 2025-12-08 23:46+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: imex_inventory_report
+#: model:ir.actions.report,print_report_name:imex_inventory_report.action_imex_inventory_report_pdf
+msgid "'Stock Cart Report'"
+msgstr "'تقرير حركة صنف'"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.custom_layout_mhamed
+msgid "(document name)"
+msgstr "(اسم المستند)"
+
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_buttons
+msgid ""
+"<span class=\"fa fa-fa-file-excel-o\"/>\n"
+"            Export"
+msgstr ""
+"<span class=\"fa fa-fa-file-excel-o\"/>\n"
+"            تصدير"
+
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_buttons
+msgid ""
+"<span class=\"fa fa-print\"/>\n"
+"            Print"
+msgstr ""
+"<span class=\"fa fa-print\"/>\n"
+"            طباعة"
+
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_wizard_form
+msgid "<span invisible=\"len_product != 1\">or</span>"
+msgstr "<span invisible=\"len_product != 1\">أو</span>"
+
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>#</span>"
+msgstr "<span>#</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Amount</span>"
+msgstr "<span>المبلغ</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Balance</span>"
+msgstr "<span>الرصيد</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Barcode</span>"
+msgstr "<span>الباركود</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Category</span>"
+msgstr "<span>الفئة</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Cost</span>"
+msgstr "<span>التكلفة</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Initial</span>"
+msgstr "<span>الرصيد الابتدائي</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Location</span>"
+msgstr "<span>الموقع</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Product Code</span>"
+msgstr "<span>رمز المنتج</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Product Name</span>"
+msgstr "<span>اسم المنتج</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Qty</span>"
+msgstr "<span>الكمية</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Sales Price</span>"
+msgstr "<span>سعر البيع</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_report_base
+msgid "<span>Stock Cart Report</span>"
+msgstr "<span>تقرير حركة صنف</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Total In</span>"
+msgstr "<span>الإجمالي الداخل</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>Total Out</span>"
+msgstr "<span>الإجمالي الخارج</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_pdf
+msgid "<span>UoM</span>"
+msgstr "<span>وحدة القياس</span>"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.custom_layout_mhamed
+msgid "<strong>Company address block</strong>"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.custom_layout_mhamed
+msgid "<strong>Company details block</strong>"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_report_filters
+msgid "All stocks"
+msgstr "جميع المخزون"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__product_amount
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__amount
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Amount"
+msgstr "المبلغ"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__product_balance
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__balance
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Balance"
+msgstr "الرصيد"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__product_barcode
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_barcode
+msgid "Barcode"
+msgstr "الباركود"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_wizard_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_report_filters
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_search
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Category"
+msgstr "الفئة"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__company_id
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.custom_layout_mhamed
+msgid "Company tagline"
+msgstr "شعار الشركة"
+
+#. module: imex_inventory_report
+#: model:ir.actions.server,name:imex_inventory_report.stock_compute_internal_transfer_data
+msgid "Compute Internal Transfer Data"
+msgstr "حساب بيانات النقل الداخلي"
+
+#. module: imex_inventory_report
+#: model:ir.actions.server,name:imex_inventory_report.stock_compute_main_product_qty
+msgid "Compute Main Product Qty"
+msgstr "حساب كمية المنتج الرئيسي"
+
+#. module: imex_inventory_report
+#: model_terms:ir.actions.server,help:imex_inventory_report.stock_compute_internal_transfer_data
+msgid "Compute internal transfer data for selected stock move lines."
+msgstr "حساب بيانات النقل الداخلي لأسطر حركة المخزون المحددة."
+
+#. module: imex_inventory_report
+#: model_terms:ir.actions.server,help:imex_inventory_report.stock_compute_main_product_qty
+msgid "Compute the main product quantity for selected move lines."
+msgstr "حساب كمية المنتج الرئيسي لأسطر الحركة المحددة."
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.custom_layout_mhamed
+msgid "Contains the company address."
+msgstr ""
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.custom_layout_mhamed
+msgid "Contains the company details."
+msgstr ""
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_standard_price
+msgid "Cost"
+msgstr "التكلفة"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__currency_id
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__company_currency_id
+msgid "Currency"
+msgstr "العملة"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__date
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_search
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+msgid "Date"
+msgstr "التاريخ"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_report_filters
+msgid "Date From"
+msgstr "التاريخ من"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_report_filters
+msgid "Date To"
+msgstr "التاريخ إلى"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+msgid "Dest Location"
+msgstr "الموقع الوجهة"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_search
+msgid "Dest location"
+msgstr "الموقع الوجهة"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__display_name
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__display_name
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__display_name
+msgid "Display Name"
+msgstr "الاسم المعروض"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__date_to
+msgid "End Date"
+msgstr "تاريخ الانتهاء"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_search
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_search
+msgid "Group By"
+msgstr "تجميع حسب"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__is_groupby_location
+msgid "Group Locations"
+msgstr "تجميع المواقع"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__id
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__id
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__id
+msgid "ID"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,help:imex_inventory_report.field_imex_inventory_report_wizard__is_groupby_location
+msgid ""
+"If checked qty will groupby location mean count internal transfer qty else "
+"will not count internal transfer qty"
+msgstr ""
+"إذا تم تحديد هذا الخيار، فسيتم تجميع الكميات حسب الموقع ويعني ذلك احتساب كميات النقل الداخلي، "
+"أما إذا لم يتم تحديده فلن يتم احتساب كميات النقل الداخلي"
+
+#. module: imex_inventory_report
+#: model:ir.model,name:imex_inventory_report.model_imex_inventory_details_report
+msgid "Imex Inventory Details Report"
+msgstr "تقرير تفاصيل المخزون – Imex"
+
+#. module: imex_inventory_report
+#: model:ir.model,name:imex_inventory_report.model_imex_inventory_report
+msgid "Imex Inventory Report"
+msgstr "تقرير المخزون – Imex"
+
+#. module: imex_inventory_report
+#: model:ir.model,name:imex_inventory_report.model_imex_inventory_report_wizard
+msgid "Imex Inventory Report Wizard"
+msgstr "معالج تقرير المخزون – Imex"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_tree
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+msgid "In"
+msgstr "الوارد"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_search
+msgid "In stock"
+msgstr "في المخزون"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__initial
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__initial
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_report_base
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Initial"
+msgstr "الرصيد الابتدائي"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__initial_amount
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__initial_amount
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Initial Amount"
+msgstr "المبلغ الابتدائي"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__product_default_code
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_default_code
+msgid "Internal Reference"
+msgstr "المرجع الداخلي"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_stock_move_line__is_internal_transfer
+msgid "Internal Transfer"
+msgstr "النقل الداخلي"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_stock_move_line__internal_transfer_cost
+msgid "Internal Transfer Cost"
+msgstr "تكلفة النقل الداخلي"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,help:imex_inventory_report.field_imex_inventory_details_report__product_barcode
+#: model:ir.model.fields,help:imex_inventory_report.field_imex_inventory_report__product_barcode
+msgid "International Article Number used for product identification."
+msgstr "رقم المقالة الدولي المستخدم لتحديد المنتج."
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__len_product
+msgid "Len Product"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__location_id
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__location
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__location_id
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_report_filters
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_search
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Location"
+msgstr "الموقع"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__location_dest_id
+msgid "Location Dest"
+msgstr "الموقع الوجهة"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.custom_layout_mhamed
+msgid "Logo"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_stock_move_line__main_product_qty
+msgid "Main Product Quantity"
+msgstr "كمية المنتج الرئيسي"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_stock_move_line__main_product_uom_id
+msgid "Main Product UoM"
+msgstr "وحدة قياس المنتج الرئيسي"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_search
+msgid "Not SCR Qty"
+msgstr "الكمية غير SCR"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__origin
+msgid "Origin"
+msgstr "المصدر"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_tree
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+msgid "Out"
+msgstr "الصادر"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_search
+msgid "Out of stock"
+msgstr "غير متوفر في المخزون"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.custom_layout_mhamed
+msgid ""
+"Page\n"
+"                        <span class=\"page\"/>\n"
+"                        /\n"
+"                        <span class=\"topage\"/>"
+msgstr ""
+"الصفحة\n"
+"                        <span class=\"page\"/>\n"
+"                        /\n"
+"                        <span class=\"topage\"/>"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__partner_id
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_search
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+msgid "Partner"
+msgstr "العميل"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__picking_id
+msgid "Picking"
+msgstr "أمر النقل"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_tree
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+msgid "Price"
+msgstr "السعر"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,help:imex_inventory_report.field_imex_inventory_report__product_list_price
+msgid "Price at which the product is sold to customers."
+msgstr "السعر الذي يُباع به المنتج للعملاء."
+
+#. module: imex_inventory_report
+#: model:ir.actions.report,name:imex_inventory_report.action_imex_inventory_report_pdf
+msgid "Print Stock Cart Report"
+msgstr "طباعة تقرير حركة الصنف"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__product_id
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_id
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_search
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_report_filters
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_search
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Product"
+msgstr "المنتج"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__product_category_ids
+msgid "Product Categories"
+msgstr "فئات المنتجات"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__product_category
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_category
+msgid "Product Category"
+msgstr "فئة المنتج"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__product_in
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_in
+msgid "Product In"
+msgstr "الوارد من المنتج"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_in_amount
+msgid "Product In Amount"
+msgstr "المبلغ الوارد من المنتج"
+
+#. module: imex_inventory_report
+#: model:ir.model,name:imex_inventory_report.model_stock_move_line
+msgid "Product Moves (Stock Move Line)"
+msgstr "تحركات المنتج (بنود حركة المخزون)"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__product_out
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_out
+msgid "Product Out"
+msgstr "الصادر من المنتج"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_out_amount
+msgid "Product Out Amount"
+msgstr "المبلغ الصادر من المنتج"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__main_product_uom_id
+msgid "Product UoM"
+msgstr "وحدة قياس المنتج"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__product_uom_id
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_uom_id
+msgid "Product Uom"
+msgstr "وحدة قياس المنتج"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__product_ids
+msgid "Products"
+msgstr "المنتجات"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__quantity
+msgid "Quantity"
+msgstr "الكمية"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__reference
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_search
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_tree
+msgid "Refrence"
+msgstr "المرجع"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_search
+msgid "SCR Qty"
+msgstr "كمية SCR"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__product_list_price
+msgid "Sales Price"
+msgstr "سعر البيع"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+msgid "Source Location"
+msgstr "الموقع المصدر"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_search
+msgid "Src location"
+msgstr "الموقع المصدر"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report_wizard__date_from
+msgid "Start Date"
+msgstr "تاريخ البداية"
+
+#. module: imex_inventory_report
+#: model:ir.actions.act_window,name:imex_inventory_report.action_imex_inventory_report_tree_view
+#: model:ir.actions.act_window,name:imex_inventory_report.imex_inventory_report_action
+#: model:ir.actions.report,name:imex_inventory_report.action_imex_inventory_details_report_html
+#: model:ir.ui.menu,name:imex_inventory_report.imex_inventory_report_menu
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_search
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_tree
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Stock Cart Report"
+msgstr "تقرير حركة صنف"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_search
+msgid "Stock Cart Report Search"
+msgstr "تقرير حركة صنف"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.custom_layout_mhamed
+msgid "Tax ID"
+msgstr "الرقم الضريبي"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_details_report_tree
+msgid "Total"
+msgstr "الإجمالي"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Amount"
+msgstr "المجموع الكلي"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Amount In"
+msgstr "إجمالي المبالغ الواردة"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Amount Out"
+msgstr "إجمالي المبالغ الصادرة"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Balance"
+msgstr "الرصيد الإجمالي"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Initial"
+msgstr "إجمالي الرصيد الابتدائي"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Initial Amount"
+msgstr "إجمالي المبلغ الابتدائي"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Out Amount"
+msgstr "إجمالي المبالغ الصادرة"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Qty In"
+msgstr "إجمالي الكميات الواردة"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Qty Out"
+msgstr "إجمالي الكميات الصادرة"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Qty out"
+msgstr "إجمالي الكميات الصادرة"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "Total Value"
+msgstr "إجمالي القيمة"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__transaction_value
+msgid "Transaction Value"
+msgstr "قيمة العملية"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.report_imex_inventory_details_lines_header
+msgid "UOM"
+msgstr "وحدة القياس"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.custom_layout_mhamed
+msgid "US12345671"
+msgstr "US12345671"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_details_report__unit_cost
+msgid "Unit Cost"
+msgstr "تكلفة الوحدة"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.view_imex_inventory_report_tree
+msgid "UoM"
+msgstr "وحدة القياس"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,field_description:imex_inventory_report.field_imex_inventory_report__line_value
+msgid "Value"
+msgstr "القيمة"
+
+#. module: imex_inventory_report
+#: model:ir.model.fields,help:imex_inventory_report.field_imex_inventory_report__product_standard_price
+msgid "Value of the product (automatically computed in AVCO)"
+msgstr "قيمة المنتج (يتم احتسابها تلقائيًا باستخدام طريقة AVCO)"
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_wizard_form
+msgid "View Details"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_wizard_form
+msgid "View Report"
+msgstr ""
+
+#. module: imex_inventory_report
+#: model_terms:ir.ui.view,arch_db:imex_inventory_report.imex_inventory_report_wizard_form
+msgid "or"
+msgstr "أو"
