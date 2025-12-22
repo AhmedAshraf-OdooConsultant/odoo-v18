@@ -1,0 +1,66 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* uom_in_product
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0+e\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-12-25 20:04+0000\n"
+"PO-Revision-Date: 2024-12-25 20:04+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: uom_in_product
+#: model:ir.model.fields,field_description:uom_in_product.field_product_product__create_other_units
+#: model:ir.model.fields,field_description:uom_in_product.field_product_template__create_other_units
+msgid "Create Other Units"
+msgstr "إنشاء وحدات اخرى"
+
+#. module: uom_in_product
+#: model:ir.actions.server,name:uom_in_product.import_product_server
+msgid "Import sub Product"
+msgstr "تجميع الوحدات الفرعية لكل المنتجات "
+
+#. module: uom_in_product
+#: model:ir.model.fields,field_description:uom_in_product.field_product_product__mrp_bom_domain
+#: model:ir.model.fields,field_description:uom_in_product.field_product_template__mrp_bom_domain
+msgid "Mrp Bom Domain"
+msgstr ""
+
+#. module: uom_in_product
+#: model:ir.model.fields,field_description:uom_in_product.field_product_product__other_units_id
+#: model:ir.model.fields,field_description:uom_in_product.field_product_template__other_units_id
+msgid "Other Units"
+msgstr "الوحدات الاخرى"
+
+#. module: uom_in_product
+#: model:ir.model,name:uom_in_product.model_product_template
+msgid "Product"
+msgstr "المنتج "
+
+#. module: uom_in_product
+#: model:ir.model,name:uom_in_product.model_product_product
+msgid "Product Variant"
+msgstr "متغير المنتج "
+
+#. module: uom_in_product
+#: model:base.automation,name:uom_in_product.action_uom_auto
+msgid "Set UoM to Ref"
+msgstr ""
+
+#. module: uom_in_product
+#: model:ir.model.fields,field_description:uom_in_product.field_product_product__sub_product_created
+#: model:ir.model.fields,field_description:uom_in_product.field_product_template__sub_product_created
+msgid "Sub Product Created"
+msgstr "المنتجات الفرعية المنشئة"
+
+#. module: uom_in_product
+#: model:ir.model.fields,field_description:uom_in_product.field_product_product__uom_cat_id
+#: model:ir.model.fields,field_description:uom_in_product.field_product_template__uom_cat_id
+msgid "Uom Cat"
+msgstr ""

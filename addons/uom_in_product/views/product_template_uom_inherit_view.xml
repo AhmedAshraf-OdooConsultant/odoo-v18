@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="product_template_inherit_form_view" model="ir.ui.view">
+            <field name="name">Add sub uom to product view</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/notebook/page[@name='general_information']/group/group/field[@name='product_tooltip']"
+                       position="after">
+                    <field name="create_other_units" readonly="id == False"/>
+                    <field name="other_units_id" domain="[('category_id','=',uom_cat_id),('id','!=',uom_id)]"
+                           widget="many2many_tags"
+                           invisible="create_other_units == False"/>
+                    <field name="uom_cat_id" invisible="1"/>
+                    <field name="sub_product_created" edit="1" invisible="create_other_units == False">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="barcode"/>
+                            <field name="lst_price"/>
+                            <field name="uom_id"/>
+                        </list>
+                    </field>
+
+                </xpath>
+            </field>
+        </record>
+
+        <record id="product_template_in_bom_form_view" model="ir.ui.view">
+            <field name="name">Add domain to product bom form view</field>
+            <field name="model">mrp.bom</field>
+            <field name="inherit_id" ref="mrp.mrp_bom_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group/group/field[@name='product_tmpl_id']" position="attributes">
+                    <attribute name="domain">[('purchase_ok','!=',False)]</attribute>
+                </xpath>
+                <xpath expr="//sheet/notebook/page/field[@name='bom_line_ids']/list/field[@name='product_id']"
+                       position="attributes">
+                    <attribute name="domain">[('purchase_ok','!=',False)]</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
