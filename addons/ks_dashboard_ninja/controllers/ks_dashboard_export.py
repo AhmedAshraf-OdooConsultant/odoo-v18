@@ -3,7 +3,7 @@ import json
 import operator
 import logging
 
-from odoo.addons.web.controllers.main import ExportFormat
+from odoo.addons.web.controllers.export import ExcelExport as ExportFormat
 
 from odoo import http
 from odoo.http import request
