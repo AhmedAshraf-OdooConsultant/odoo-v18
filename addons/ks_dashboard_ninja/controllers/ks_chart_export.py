@@ -6,14 +6,17 @@ import json
 import operator
 import logging
 
-from odoo.addons.web.controllers.main import ExportFormat, ExportXlsxWriter
+from odoo.addons.web.controllers.export import ExportXlsxWriter
+from odoo.addons.web.controllers.export import ExcelExport as ExportFormat
 from odoo.tools.translate import _
 from werkzeug.exceptions import InternalServerError
 from odoo import http
 from odoo.http import content_disposition, request
-from odoo.tools.misc import xlwt
+try:
+    import xlwt
+except ImportError:
+    xlwt = None
 from odoo.exceptions import UserError
-from odoo.tools import pycompat
 _logger = logging.getLogger(__name__)
 
 class KsChartExport(http.Controller):
