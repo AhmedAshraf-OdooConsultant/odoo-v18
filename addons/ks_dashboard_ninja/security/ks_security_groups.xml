@@ -22,7 +22,6 @@
         <record model="res.groups" id="ks_dashboard_ninja_group_manager">
             <field name="name">Show Full Dashboard Features</field>
             <field name="category_id" ref="ks_dashboard_ninja.ks_dashboard_ninja_security_groups"/>
-            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
         </record>
 
         <record id="base.group_system" model="res.groups">
