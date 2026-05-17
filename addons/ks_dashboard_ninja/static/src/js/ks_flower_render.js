@@ -4,8 +4,8 @@
 
 import { registry } from "@web/core/registry";
 import { CharField } from "@web/views/fields/char/char_field";
-import { qweb } from 'web.core';
-const { Component, onWillUnmount, onWillUpdateProps, useEffect, useRef, useState, onMounted } = owl;
+import { renderToString } from "@web/core/utils/render";
+import { Component, onWillUnmount, onWillUpdateProps, useEffect, useRef, useState, onMounted } from "@odoo/owl";
 
 export class Ks_flower_chart extends Component {
     setup() {

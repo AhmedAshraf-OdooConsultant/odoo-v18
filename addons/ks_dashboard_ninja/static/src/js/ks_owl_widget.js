@@ -1,15 +1,13 @@
 /** @odoo-module **/
 import { registry } from "@web/core/registry";
-import core from 'web.core';
-import { qweb } from 'web.core';
+import { renderToString } from "@web/core/utils/render";
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
-import fieldUtils from 'web.field_utils';
-import utils from 'web.utils';
-import session from 'web.session';
+import { formatFloat } from "@web/views/fields/formatters";
+import { user } from "@web/core/user";
 
 
 
-const { Component, onWillUpdateProps, useState, onRendered, useRef } = owl;
+import { Component, onWillUpdateProps, useState, onRendered, useRef } from "@odoo/owl";
 //import { Component, onMounted, onWillUnmount, useRef } from "@odoo/owl";
 
 
@@ -259,13 +257,13 @@ export class estate extends Component{
                     // Use magic-word technique for detecting image type
                     var img_src = 'data:image/' + (self.file_type_magic_word[this.props.record.data.ks_icon] || 'png') + ';base64,' + this.props.record.data.ks_icon;
                 } else {
-                    var img_src = session.url('/web/image', {
+                    var img_src = '/web/image?' + new URLSearchParams({
                         model: self.env.model.root.resModel,
                         id: JSON.stringify(this.props.record.data.id),
                         field: "ks_icon",
                         // unique forces a reload of the image when the record has been updated
                         unique: String(this.props.record.data.__last_update.ts),
-                    });
+                    }).toString();
                 }
 
             }
@@ -302,13 +300,13 @@ export class estate extends Component{
                     // Use magic-word technique for detecting image type
                     this.state.img_src = 'data:image/' + (self.file_type_magic_word[this.props.record.data.ks_icon] || 'png') + ';base64,' + this.props.record.data.ks_icon;
                 } else {
-                    this.state.img_src = session.url('/web/image', {
+                    this.state.img_src = '/web/image?' + new URLSearchParams({
                         model: self.env.model.root.resModel,
                         id: JSON.stringify(this.props.record.data.id),
                         field: "ks_icon",
                         // unique forces a reload of the image when the record has been updated
                         unique: String(this.props.record.data.__last_update.ts),
-                    });
+                    }).toString();
                 }
 
             }

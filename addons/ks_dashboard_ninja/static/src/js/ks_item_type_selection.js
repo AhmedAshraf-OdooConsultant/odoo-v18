@@ -2,10 +2,9 @@
 import "web.dom_ready";
 
 import { registry } from "@web/core/registry";
-import core from 'web.core';
-import { qweb } from 'web.core';
+import { renderToString } from "@web/core/utils/render";
 
- const { Component,useState} = owl;
+ import { Component, useState } from "@odoo/owl";
 
 export class KsDashboarditemtype extends Component {
         setup(){

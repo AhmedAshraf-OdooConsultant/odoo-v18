@@ -3,14 +3,13 @@
 import { formatDate, parseDateTime } from "@web/core/l10n/dates";
 import { CharField } from "@web/views/fields/char/char_field";
 import { registry } from "@web/core/registry";
-import field_utils from 'web.field_utils';
+import { formatFloat } from "@web/views/fields/formatters";
 import { loadCSS,loadJS } from "@web/core/assets";
-import { qweb } from 'web.core';
-import core from 'web.core';
-import session from 'web.session';
+import { renderToString } from "@web/core/utils/render";
+import { user } from "@web/core/user";
 const { useListener } = require("@web/core/utils/hooks");
 
-const { useEffect, useRef, xml, onWillUpdateProps,onMounted,onWillStart} = owl;
+import { useEffect, useRef, xml, onWillUpdateProps, onMounted, onWillStart } from "@odoo/owl";
 
 
  export class KsImageWidget extends CharField {
@@ -40,7 +39,7 @@ const { useEffect, useRef, xml, onWillUpdateProps,onMounted,onWillStart} = owl;
      ks_image_widget_icon_container(ev){
          var self = this;
          this.props.ks_icon_set = ['home', 'puzzle-piece', 'clock-o', 'comments-o', 'car', 'calendar', 'calendar-times-o', 'bar-chart', 'commenting-o', 'star-half-o', 'address-book-o', 'tachometer', 'search', 'money', 'line-chart', 'area-chart', 'pie-chart', 'check-square-o', 'users', 'shopping-cart', 'truck', 'user-circle-o', 'user-plus', 'sun-o', 'paper-plane', 'rss', 'gears', 'check', 'book']
-         var $modal=$(qweb.render("ks_icon_container_modal_template",{ ks_fa_icons_set: this.props.ks_icon_set}));
+         var $modal=$(renderToString("ks_icon_container_modal_template",{ ks_fa_icons_set: this.props.ks_icon_set}));
          const modal_new=new Modal($modal[0]);
          this.modal = modal_new;
          for (var i = 0; i < this.modal._element.querySelectorAll('.ks_icon_container_list').length; i++) {

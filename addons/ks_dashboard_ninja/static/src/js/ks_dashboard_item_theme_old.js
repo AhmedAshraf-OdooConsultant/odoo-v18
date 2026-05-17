@@ -3,12 +3,11 @@
 import { formatDate, parseDateTime } from "@web/core/l10n/dates";
 import { CharField } from "@web/views/fields/char/char_field";
 import { registry } from "@web/core/registry";
-import field_utils from 'web.field_utils';
-import { qweb } from 'web.core';
-import utils from 'web.utils';
-import session from 'web.session';
+import { formatFloat } from "@web/views/fields/formatters";
+import { renderToString } from "@web/core/utils/render";
+import { user } from "@web/core/user";
 
-const { useEffect, useRef, xml, onWillUpdateProps,onWillStart} = owl;
+import { useEffect, useRef, xml, onWillUpdateProps, onWillStart } from "@odoo/owl";
 
 class KsDashboardTheme extends CharField {
         setup() {
@@ -40,7 +39,7 @@ class KsDashboardTheme extends CharField {
         var self = this;
         $(this.input.el.parentElement).find('div').remove()
         $(this.input.el.parentElement).find('input').addClass('d-none')
-        var $view = $(qweb.render('ks_dashboard_theme_view'));
+        var $view = $(renderToString('ks_dashboard_theme_view'));
         if (self.props.record.data.ks_dashboard_item_theme) {
             $view.find("input[value='" + self.props.record.data.ks_dashboard_item_theme + "']").prop("checked", true);
         }

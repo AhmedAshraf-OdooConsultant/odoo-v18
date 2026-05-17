@@ -3,12 +3,11 @@
 import "web.dom_ready";
 
 import { registry } from "@web/core/registry";
-import core from 'web.core';
-import { qweb } from 'web.core';
+import { renderToString } from "@web/core/utils/render";
 import { loadCSS,loadJS } from "@web/core/assets";
 import { useAutofocus } from "@web/core/utils/hooks"
 import { standardFieldProps } from "@web/views/fields/standard_field_props";
-const { Component,useState,onWillUpdateProps} = owl;
+import { Component, useState, onWillUpdateProps } from "@odoo/owl";
 
     //Widget for color picker being used in dashboard item create view.
     //TODO : This color picker functionality can be improved a lot.

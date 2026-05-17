@@ -1,8 +1,8 @@
 /** @odoo-module **/
 import {registry} from "@web/core/registry";
 import {useInputField} from "@web/views/fields/input_field_hook";
-const {Component,useRef,useState,onWillStart} = owl;
-import { qweb } from 'web.core';
+import { Component, useRef, useState, onWillStart } from "@odoo/owl";
+import { renderToString } from "@web/core/utils/render";
 var ajax = require('web.ajax');
 
 

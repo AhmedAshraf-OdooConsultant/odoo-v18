@@ -5,7 +5,7 @@
         AI button injection is now handled via JS component patching.
         This file contains only standalone templates.
     -->
-    <t t-name="ksNoAIItemView">
+    <t t-name="ksNoAIItemView" owl="1">
         <div class="o_view_nocontent">
             <div class="o_nocontent_help">
                 <p class="o_view_nocontent_neutral_face">
@@ -23,7 +23,7 @@
     </t>
 
     <!-- AI Action Buttons — rendered conditionally inside KsDashboardNinja component -->
-    <t t-name="ks_ai_action_buttons">
+    <t t-name="ks_ai_action_buttons" owl="1">
         <t t-if="props.ks_ai_dashboard">
             <div class="ks_select_text ks-helping-text">
                 Here are your generated Items, kindly select to add them in your current dashboard
@@ -54,7 +54,7 @@
     </t>
 
     <!-- Selected overlay for grid items -->
-    <t t-name="ks_selected_overlay">
+    <t t-name="ks_selected_overlay" owl="1">
         <img src="ks_dashboard_ninja/static/description/images/selected.svg"
              class="ks_img_display d-none" width="30"/>
     </t>

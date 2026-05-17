@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <templates>
-    <t t-name="ks_widget_toggle">
+    <t t-name="ks_widget_toggle" owl="1">
         <div class="ks_select_dashboard_item_toggle">
             <div class="ks_select_icon_div">
                 <input id="ks_default_icon" type="radio" name="default_custom_icon_toggle"
@@ -15,7 +15,7 @@
             </div>
         </div>
     </t>
-    <t t-name="ks_widget_toggle_kpi_target_view">
+    <t t-name="ks_widget_toggle_kpi_target_view" owl="1">
         <div class="ks_select_dashboard_item_toggle">
             <div class="ks_select_icon_div">
                 <input id="ks_default_icon" type="radio" name="default_custom_icon_toggle"
@@ -29,7 +29,7 @@
             </div>
         </div>
     </t>
-    <t t-name="ks_widget_toggle_kpi">
+    <t t-name="ks_widget_toggle_kpi" owl="1">
         <div class="ks_select_dashboard_item_toggle">
             <div class="ks_select_icon_div">
                 <input id="ks_sum_kpi" type="radio" name="kpi_data_comparison_none"

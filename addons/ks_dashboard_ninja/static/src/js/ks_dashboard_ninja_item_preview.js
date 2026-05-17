@@ -3,13 +3,12 @@
 import { formatDate, parseDateTime } from "@web/core/l10n/dates";
 import { CharField } from "@web/views/fields/char/char_field";
 import { registry } from "@web/core/registry";
-import field_utils from 'web.field_utils';
-import { qweb } from 'web.core';
-import utils from 'web.utils';
-import session from 'web.session';
+import { formatFloat } from "@web/views/fields/formatters";
+import { renderToString } from "@web/core/utils/render";
+import { user } from "@web/core/user";
 var KsGlobalFunction = require('ks_dashboard_ninja.KsGlobalFunction');
 
-const { useEffect, useRef, xml, onWillUpdateProps} = owl;
+import { useEffect, useRef, xml, onWillUpdateProps } from "@odoo/owl";
 
 class KsItemPreview extends CharField {
 
@@ -116,7 +115,7 @@ class KsItemPreview extends CharField {
             if (si[i].symbol === 'M'){
 //                si[i].value = 1000000;
                 num = parseInt(num) / 1000000
-                num = field_utils.format.integer(num, Float64Array)
+                num = Math.round(num, Float64Array)
                 if (negative) {
                     return "-" + num + si[i].symbol;
                 } else {
@@ -124,9 +123,9 @@ class KsItemPreview extends CharField {
                 }
                 }else{
                     if (num % 1===0){
-                    num = field_utils.format.integer(num, Float64Array)
+                    num = Math.round(num, Float64Array)
                     }else{
-                        num = field_utils.format.float(num, Float64Array, {digits: [0,ks_precision_digits]});
+                        num = parseFloat(num).toFixed(ks_precision_digits);
                     }
                     if (negative) {
                         return "-" + num;
@@ -227,7 +226,7 @@ class KsItemPreview extends CharField {
                 icon_select: field.ks_icon_select,
                 default_icon: field.ks_default_icon,
                 icon_color: ks_rgba_icon_color,
-                count_tooltip: field_utils.format.float(field.ks_record_count, Float64Array, {digits: [0, field.ks_precision_digits]}),
+                count_tooltip: parseFloat(field.ks_record_count).toFixed(field.ks_precision_digits),
             }
 
             if (field.ks_icon) {
@@ -236,13 +235,13 @@ class KsItemPreview extends CharField {
                     // Use magic-word technique for detecting image type
                     item_info['img_src'] = 'data:image/' + (self.file_type_magic_word[field.ks_icon] || 'png') + ';base64,' + field.ks_icon;
                 } else {
-                    item_info['img_src'] = session.url('/web/image', {
+                    item_info['img_src'] = '/web/image?' + new URLSearchParams({
                         model: self.env.model.root.resModel,
                         id: JSON.stringify(this.props.record.data.id),
                         field: "ks_icon",
                         // unique forces a reload of the image when the record has been updated
                         unique: String(this.props.record.data.__last_update.ts),
-                    });
+                    }).toString();
                 }
 
             }
@@ -287,7 +286,7 @@ class KsItemPreview extends CharField {
 
             switch (field.ks_layout) {
                 case 'layout1':
-                    $val = $(qweb.render('ks_db_list_preview_layout1', item_info));
+                    $val = $(renderToString('ks_db_list_preview_layout1', item_info));
                     $val.css({
                         "background-color": ks_rgba_background_color,
                         "color": ks_rgba_font_color
@@ -295,7 +294,7 @@ class KsItemPreview extends CharField {
                     break;
 
                 case 'layout2':
-                    $val = $(qweb.render('ks_db_list_preview_layout2', item_info));
+                    $val = $(renderToString('ks_db_list_preview_layout2', item_info));
                     var ks_rgba_dark_background_color_l2 = self._get_rgba_format(self.ks_get_dark_color(field.ks_background_color.split(',')[0], field.ks_background_color.split(',')[1], -10));
                     $val.find('.ks_dashboard_icon_l2').css({
                         "background-color": ks_rgba_dark_background_color_l2,
@@ -307,7 +306,7 @@ class KsItemPreview extends CharField {
                     break;
 
                 case 'layout3':
-                    $val = $(qweb.render('ks_db_list_preview_layout3', item_info));
+                    $val = $(renderToString('ks_db_list_preview_layout3', item_info));
                     $val.css({
                         "background-color": ks_rgba_background_color,
                         "color": ks_rgba_font_color
@@ -315,7 +314,7 @@ class KsItemPreview extends CharField {
                     break;
 
                 case 'layout4':
-                    $val = $(qweb.render('ks_db_list_preview_layout4', item_info));
+                    $val = $(renderToString('ks_db_list_preview_layout4', item_info));
                     $val.find('.ks_dashboard_icon_l4').css({
                         "background-color": ks_rgba_background_color,
                     });
@@ -332,7 +331,7 @@ class KsItemPreview extends CharField {
                     break;
 
                 case 'layout5':
-                    $val = $(qweb.render('ks_db_list_preview_layout5', item_info));
+                    $val = $(renderToString('ks_db_list_preview_layout5', item_info));
                     $val.css({
                         "background-color": ks_rgba_background_color,
                         "color": ks_rgba_font_color
@@ -341,7 +340,7 @@ class KsItemPreview extends CharField {
 
                 case 'layout6':
                     //                        item_info['icon_color'] = self._get_rgba_format(self.ks_get_dark_color(field.ks_background_color.split(',')[0],field.ks_background_color.split(',')[1],-10));
-                    $val = $(qweb.render('ks_db_list_preview_layout6', item_info));
+                    $val = $(renderToString('ks_db_list_preview_layout6', item_info));
                     $val.css({
                         "background-color": ks_rgba_background_color,
                         "color": ks_rgba_font_color
@@ -350,20 +349,20 @@ class KsItemPreview extends CharField {
                     break;
 
                 default:
-                    $val = $(qweb.render('ks_db_list_preview'));
+                    $val = $(renderToString('ks_db_list_preview'));
                     break;
 
             }
 
             $(this.input.el.parentElement).append($val);
-            $(this.input.el.parentElement).append(qweb.render('ks_db_item_preview_footer_note'));
+            $(this.input.el.parentElement).append(renderToString('ks_db_item_preview_footer_note'));
         }
 
         _onKsGlobalFormatter(ks_record_count, ks_data_format, ks_precision_digits){
             var self = this;
             if (ks_data_format == 'exact'){
 //                return ks_record_count;
-                return field_utils.format.float(ks_record_count, Float64Array, {digits: [0, ks_precision_digits]});
+                return parseFloat(ks_record_count).toFixed(ks_precision_digits);
             }else{
                 if (ks_data_format == 'indian'){
                     return self.ksNumIndianFormatter( ks_record_count, 1);

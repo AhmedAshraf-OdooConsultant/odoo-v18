@@ -16,7 +16,7 @@ import { useOpenMany2XRecord } from "@web/views/fields/relational_utils";
 import { parseFloat as oParseFloat } from "@web/views/fields/parsers";
 import { formatPercentage } from "@web/views/fields/formatters";
 
-const { Component, useState, useRef, useExternalListener, onWillUpdateProps, onWillStart, onPatched, onWillRender } = owl;
+import { Component, useState, useRef, useExternalListener, onWillUpdateProps, onWillStart, onPatched, onWillRender } from "@odoo/owl";
 
 //const PLAN_APPLICABILITY = {
 //    mandatory: _lt("Mandatory"),

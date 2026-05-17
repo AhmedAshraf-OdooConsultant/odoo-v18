@@ -3,13 +3,12 @@
 import { formatDate, parseDateTime } from "@web/core/l10n/dates";
 import { CharField } from "@web/views/fields/char/char_field";
 import { registry } from "@web/core/registry";
-import field_utils from 'web.field_utils';
+import { formatFloat } from "@web/views/fields/formatters";
 import { loadCSS,loadJS } from "@web/core/assets";
-import { qweb } from 'web.core';
-import core from 'web.core';
-import session from 'web.session';
+import { renderToString } from "@web/core/utils/render";
+import { user } from "@web/core/user";
 
-const { useEffect, useRef, xml, onWillUpdateProps, onMounted, onWillStart } = owl;
+import { useEffect, useRef, xml, onWillUpdateProps, onMounted, onWillStart } from "@odoo/owl";
 
 class KsToDOViewPreview extends CharField {
     setup() {
@@ -59,7 +58,7 @@ class KsToDOViewPreview extends CharField {
                    if (rec.ks_to_do_data){
                         list_to_do_data = JSON.parse(rec.ks_to_do_data)
                    }
-            var $todoViewContainer = $(qweb.render('ks_to_do_container', {
+            var $todoViewContainer = $(renderToString('ks_to_do_container', {
 
                 ks_to_do_view_name: rec.name ? rec.name : 'Name',
                 to_do_view_data: list_to_do_data,

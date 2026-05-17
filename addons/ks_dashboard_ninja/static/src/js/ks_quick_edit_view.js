@@ -29,7 +29,7 @@ import { user } from "@web/core/user";
         },
 
 
-        willStart: function() {
+        onWillStart: function() {
             var self = this;
             return $.when(this._super()).then(function() {
                 return self._ksCreateController();

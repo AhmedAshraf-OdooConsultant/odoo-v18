@@ -3,14 +3,13 @@
 import { formatDate, parseDateTime } from "@web/core/l10n/dates";
 import { CharField } from "@web/views/fields/char/char_field";
 import { registry } from "@web/core/registry";
-import field_utils from 'web.field_utils';
-import { qweb } from 'web.core';
-import utils from 'web.utils';
-import session from 'web.session';
+import { formatFloat } from "@web/views/fields/formatters";
+import { renderToString } from "@web/core/utils/render";
+import { user } from "@web/core/user";
 var KsGlobalFunction = require('ks_dashboard_ninja.KsGlobalFunction');
 
 
-const { useEffect, useRef, xml, onWillUpdateProps} = owl;
+import { useEffect, useRef, xml, onWillUpdateProps } from "@odoo/owl";
 
 
 class KsKpiPreviewowl extends CharField {
@@ -155,7 +154,7 @@ file_type_magic_word ={
             if (si[i].symbol === 'M'){
 //                si[i].value = 1000000;
                 num = parseInt(num) / 1000000
-                num = field_utils.format.integer(num, Float64Array)
+                num = Math.round(num, Float64Array)
                 if (negative) {
                     return "-" + num + si[i].symbol;
                 } else {
@@ -163,9 +162,9 @@ file_type_magic_word ={
                 }
                 }else{
                     if (num % 1===0){
-                    num = field_utils.format.integer(num, Float64Array)
+                    num = Math.round(num, Float64Array)
                     }else{
-                        num = field_utils.format.float(num, Float64Array, {digits: [0,ks_precision_digits]});
+                        num = parseFloat(num).toFixed(ks_precision_digits);
                     }
                     if (negative) {
                         return "-" + num;
@@ -190,7 +189,7 @@ file_type_magic_word ={
             var self = this;
             if (ks_data_format == 'exact'){
 //                return ks_record_count;
-                return field_utils.format.float(ks_record_count, Float64Array, {digits: [0, ks_precision_digits]});
+                return parseFloat(ks_record_count).toFixed(ks_precision_digits);
             }else{
                 if (ks_data_format == 'indian'){
                     return self.ksNumIndianFormatter( ks_record_count, 1);
@@ -269,11 +268,11 @@ file_type_magic_word ={
             var count = count_1 + count_2
             if (field.ks_multiplier_active){
                 item_info['count'] = self._onKsGlobalFormatter(count* field.ks_multiplier, field.ks_data_format, field.ks_precision_digits);
-                item_info['count_tooltip'] = field_utils.format.float(count * field.ks_multiplier, Float64Array, {digits: [0, field.ks_precision_digits]});
+                item_info['count_tooltip'] = parseFloat(count * field.ks_multiplier).toFixed(field.ks_precision_digits);
             }else{
 
                 item_info['count'] = self._onKsGlobalFormatter(count, field.ks_data_format, field.ks_precision_digits, field.ks_precision_digits);
-                item_info['count_tooltip'] = field_utils.format.float(count, Float64Array, {digits: [0, field.ks_precision_digits]});
+                item_info['count_tooltip'] = parseFloat(count).toFixed(field.ks_precision_digits);
             }
             if (field.ks_multiplier_active){
                 count = count * field.ks_multiplier;
@@ -283,14 +282,14 @@ file_type_magic_word ={
             item_info.pre_arrow = (target_1 - count) > 0 ? "down" : "up";
             item_info['ks_comparison'] = true;
             var target_deviation = (target_1 - count) > 0 ? Math.round(((target_1 - count) / target_1) * 100) : Math.round((Math.abs((target_1 - count)) / target_1) * 100);
-            if (target_deviation !== Infinity) item_info.target_deviation = field_utils.format.integer(target_deviation) + "%";
+            if (target_deviation !== Infinity) item_info.target_deviation = Math.round(target_deviation) + "%";
             else {
                 item_info.pre_arrow = false;
                 item_info.target_deviation = target_deviation;
             }
             var target_progress_deviation = target_1 == 0 ? 0 : Math.round((count / target_1) * 100);
-            item_info.target_progress_deviation = field_utils.format.integer(target_progress_deviation) + "%";
-            $kpi_preview = $(qweb.render("ks_kpi_preview_template_2", item_info));
+            item_info.target_progress_deviation = Math.round(target_progress_deviation) + "%";
+            $kpi_preview = $(renderToString("ks_kpi_preview_template_2", item_info));
             $kpi_preview.find('.target_deviation').css({
                 "color": ks_color
             });
@@ -309,7 +308,7 @@ file_type_magic_word ={
                 count = count * field.ks_multiplier;
             }
             if (!count) count = 0;
-            item_info['count'] = count ? field_utils.format.integer(count) + "%" : "0%";
+            item_info['count'] = count ? Math.round(count) + "%" : "0%";
             item_info['count_tooltip'] = count ? count + "%" : "0%";
             item_info.target_progress_deviation = item_info['count']
             target_1 = target_1 > 100 ? 100 : target_1;
@@ -319,7 +318,7 @@ file_type_magic_word ={
             item_info['target_enable'] = field.ks_goal_enable;
             item_info['ks_comparison'] = false;
             item_info.target_deviation = item_info.target > 100 ? 100 : item_info.target;
-            $kpi_preview = $(qweb.render("ks_kpi_preview_template_2", item_info));
+            $kpi_preview = $(renderToString("ks_kpi_preview_template_2", item_info));
             $kpi_preview.find('.target_deviation').css({
                 "color": ks_color
             });
@@ -357,7 +356,7 @@ file_type_magic_word ={
                 var acheive = diffrence >= 0 ? true : false;
                 diffrence = Math.abs(diffrence);
                 var deviation = Math.round((diffrence / target_1) * 100)
-                if (deviation !== Infinity) deviation = deviation ? field_utils.format.integer(deviation) + '%' : 0 + '%';
+                if (deviation !== Infinity) deviation = deviation ? Math.round(deviation) + '%' : 0 + '%';
             }
             if (field.ks_previous_period && ks_valid_date_selection.indexOf(field.ks_date_filter_selection) >= 0) {
                 var previous_period_data = kpi_data[0].previous_period;
@@ -368,7 +367,7 @@ file_type_magic_word ={
                 }
                 var pre_acheive = pre_diffrence > 0 ? true : false;
                 pre_diffrence = Math.abs(pre_diffrence);
-                var pre_deviation = previous_period_data ? field_utils.format.integer(parseInt((pre_diffrence / previous_period_data) * 100)) + '%' : "100%"
+                var pre_deviation = previous_period_data ? Math.round(parseInt((pre_diffrence / previous_period_data) * 100)) + '%' : "100%"
             }
              var target_progress_deviation = String(Math.round((count_1  / target_1) * 100));
              if(field.ks_multiplier_active){
@@ -396,19 +395,19 @@ file_type_magic_word ={
             }
 
             if (item_info.target_deviation === Infinity) item_info.target_arrow = false;
-            item_info.target_progress_deviation = parseInt(item_info.target_progress_deviation) ? field_utils.format.integer(parseInt(item_info.target_progress_deviation)) : "0"
+            item_info.target_progress_deviation = parseInt(item_info.target_progress_deviation) ? Math.round(parseInt(item_info.target_progress_deviation)) : "0"
             if (field.ks_icon) {
                 if (!utils.is_bin_size(field.ks_icon)) {
                     // Use magic-word technique for detecting image type
                     item_info['img_src'] = 'data:image/' + (self.file_type_magic_word[field.ks_icon[0]] || 'png') + ';base64,' + field.ks_icon;
                 } else {
-                    item_info['img_src'] = session.url('/web/image', {
+                    item_info['img_src'] = '/web/image?' + new URLSearchParams({
                         model: self.env.model.root.resModel,
                         id: JSON.stringify(this.props.record.data.id),
                         field: "ks_icon",
                         // unique forces a reload of the image when the record has been updated
                         unique: String(this.props.record.data.__last_update.ts),
-                    });
+                    }).toString();
                 }
             }
             if (field.ks_multiplier_active){
@@ -443,9 +442,9 @@ file_type_magic_word ={
             var $kpi_preview;
             if (!kpi_data[1]) {
                 if (target_view === "Number" || !field.ks_goal_enable) {
-                    $kpi_preview = $(qweb.render("ks_kpi_preview_template", item_info));
+                    $kpi_preview = $(renderToString("ks_kpi_preview_template", item_info));
                 } else if (target_view === "Progress Bar" && field.ks_goal_enable) {
-                    $kpi_preview = $(qweb.render("ks_kpi_preview_template_3", item_info));
+                    $kpi_preview = $(renderToString("ks_kpi_preview_template_3", item_info));
                     $kpi_preview.find('#ks_progressbar').val(parseInt(item_info.target_progress_deviation));
                 }
 
@@ -523,7 +522,7 @@ file_type_magic_word ={
                         }
                         item_info['count_tooltip'] = count_tooltip
                         item_info['target_enable'] = false;
-                        $kpi_preview = $(qweb.render("ks_kpi_preview_template_2", item_info));
+                        $kpi_preview = $(renderToString("ks_kpi_preview_template_2", item_info));
                         break;
                     case "Sum":
                         $kpi_preview = self.ksSum(count_1, count_2, item_info, field, target_1, $kpi_preview, kpi_data);
@@ -536,7 +535,7 @@ file_type_magic_word ={
                         if (field.ks_data_format == 'exact'){
                             if (count_1 && count_2) {
                             item_info['count_tooltip'] = count_1 / gcd + ":" + count_2 / gcd;
-                            item_info['count'] = field_utils.format.float(count_1 / gcd, Float64Array,{digits: [0, field.ks_precision_digits]}) + ":" + field_utils.format.float(count_2 / gcd, Float64Array, {digits: [0, field.ks_precision_digits]});
+                            item_info['count'] = parseFloat(count_1 / gcd).toFixed(field.ks_precision_digits) + ":" + parseFloat(count_2 / gcd).toFixed(field.ks_precision_digits);
                             } else {
                             item_info['count_tooltip'] = count_1 + ":" + count_2;
                             item_info['count'] = count_1 + ":" + count_2
@@ -551,7 +550,7 @@ file_type_magic_word ={
                                   }
                           }
                         item_info['target_enable'] = false;
-                        $kpi_preview = $(qweb.render("ks_kpi_preview_template_2", item_info));
+                        $kpi_preview = $(renderToString("ks_kpi_preview_template_2", item_info));
                         break;
                 }
             }

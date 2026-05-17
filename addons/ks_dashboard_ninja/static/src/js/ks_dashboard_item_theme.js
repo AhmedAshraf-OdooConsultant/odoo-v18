@@ -2,10 +2,9 @@
 import "web.dom_ready";
 
 import { registry } from "@web/core/registry";
-import core from 'web.core';
-import { qweb } from 'web.core';
+import { renderToString } from "@web/core/utils/render";
 
- const { Component} = owl;
+ import { Component } from "@odoo/owl";
 
     //Widget for dashboard item theme using while creating dashboard item.
 export class KsDashboardThemeowl extends Component {

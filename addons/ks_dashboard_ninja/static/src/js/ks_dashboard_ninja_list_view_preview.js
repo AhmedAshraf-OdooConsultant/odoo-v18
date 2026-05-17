@@ -3,10 +3,10 @@
 import { formatDate, parseDateTime } from "@web/core/l10n/dates";
 import { CharField } from "@web/views/fields/char/char_field";
 import { registry } from "@web/core/registry";
-import field_utils from 'web.field_utils';
-import { qweb } from 'web.core';
+import { formatFloat } from "@web/views/fields/formatters";
+import { renderToString } from "@web/core/utils/render";
 
-const { useEffect, useRef, xml, onWillUpdateProps} = owl;
+import { useEffect, useRef, xml, onWillUpdateProps } from "@odoo/owl";
 
 
 class KsListViewPreview extends CharField {
@@ -95,9 +95,7 @@ class KsListViewPreview extends CharField {
                          if( list_view_data.fields_type[index] === 'date'){
                                 list_view_data.data_rows[j]["data"][index] = moment(new Date(date)).format(this.date_format) , {}, {timezone: false};
                          } else{
-                            list_view_data.data_rows[j]["data"][index] = field_utils.format.datetime(moment(moment(date).utc(true)._d), {}, {
-                            timezone: false
-                        });
+                            list_view_data.data_rows[j]["data"][index] = new Date(moment(moment(date).utc(true)._d)).toLocaleString();
                         }
 
                         }else {list_view_data.data_rows[j]["data"][index] = "";}
@@ -113,7 +111,7 @@ class KsListViewPreview extends CharField {
                 for (var j = 0; j < list_view_data.data_rows[0]["data"].length; j++) {
                     if (typeof(list_view_data.data_rows[i].data[j]) === "number" || list_view_data.data_rows[i].data[j]) {
                         if (typeof(list_view_data.data_rows[i].data[j]) === "number") {
-                            list_view_data.data_rows[i].data[j] = field_utils.format.float(list_view_data.data_rows[i].data[j], Float64Array, {digits: [0, field.ks_precision_digits]})
+                            list_view_data.data_rows[i].data[j] = parseFloat(list_view_data.data_rows[i].data[j]).toFixed(field.ks_precision_digits)
                         }
                     } else {
                         list_view_data.data_rows[i].data[j] = "";
@@ -124,7 +122,7 @@ class KsListViewPreview extends CharField {
         } else list_view_data = false;
         count = list_view_data && field.ks_list_view_type === "ungrouped" ? count - list_view_data.data_rows.length : false;
         count = count ? count <=0 ? false : count : false;
-        var $listViewContainer = $(qweb.render('ks_list_view_container', {
+        var $listViewContainer = $(renderToString('ks_list_view_container', {
             ks_list_view_name: ks_list_view_name,
             list_view_data: list_view_data,
             count: count,

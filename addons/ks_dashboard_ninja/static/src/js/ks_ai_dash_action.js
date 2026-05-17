@@ -986,10 +986,10 @@ class KsAIDashboardNinja extends Component { constructor(props) { super(props); 
                         } else if (ks_selection === 'custom') {
                             var ks_field = chart_data.ks_field;
                             //                                                        ks_type = field_utils.format.char(ks_field);
-                            k_amount = field_utils.format.float(k_amount, Float64Array, {digits:[0,item.ks_precision_digits]});
+                            k_amount = parseFloat(k_amount).toFixed(item.ks_precision_digits);
                             return data.datasets[tooltipItem[0].datasetIndex]['label'] + " : " + k_amount + " " + ks_field;
                         } else {
-                            k_amount = field_utils.format.float(k_amount, Float64Array, {digits:[0,item.ks_precision_digits]});
+                            k_amount = parseFloat(k_amount).toFixed(item.ks_precision_digits);
                             return data.datasets[tooltipItem[0].datasetIndex]['label'] + " : " + k_amount
                         }
                     },
@@ -1085,10 +1085,10 @@ class KsAIDashboardNinja extends Component { constructor(props) { super(props); 
                         } else if (ks_selection === 'custom') {
                             var ks_field = chart_data.ks_field;
                             // ks_type = field_utils.format.char(ks_field);
-                            k_amount = field_utils.format.float(k_amount, Float64Array, {digits:[0,item.ks_precision_digits]});
+                            k_amount = parseFloat(k_amount).toFixed(item.ks_precision_digits);
                             return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount + " " + ks_field;
                         } else {
-                            k_amount = field_utils.format.float(k_amount, Float64Array,{digits:[0,item.ks_precision_digits]});
+                            k_amount = parseFloat(k_amount).toFixed(item.ks_precision_digits);
                             return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount
                         }
                     }
@@ -1296,7 +1296,7 @@ class KsAIDashboardNinja extends Component { constructor(props) { super(props); 
                     for (var j = 0; j < list_view_data.data_rows[0]["data"].length; j++) {
                         if (typeof(list_view_data.data_rows[i].data[j]) === "number" || list_view_data.data_rows[i].data[j]) {
                             if (typeof(list_view_data.data_rows[i].data[j]) === "number") {
-                                list_view_data.data_rows[i].data[j] = field_utils.format.float(list_view_data.data_rows[i].data[j], Float64Array, {digits:[0,item.ks_precision_digits]})
+                                list_view_data.data_rows[i].data[j] = parseFloat(list_view_data.data_rows[i].data[j]).toFixed(item.ks_precision_digits)
                             }
                         } else {
                             list_view_data.data_rows[i].data[j] = "";
@@ -1365,7 +1365,7 @@ class KsAIDashboardNinja extends Component { constructor(props) { super(props); 
                 var acheive = diffrence >= 0 ? true : false;
                 diffrence = Math.abs(diffrence);
                 var deviation = Math.round((diffrence / target_1) * 100)
-                if (deviation !== Infinity) deviation = deviation ? field_utils.format.integer(deviation) + '%' : 0 + '%';
+                if (deviation !== Infinity) deviation = deviation ? Math.round(deviation) + '%' : 0 + '%';
             }
             if (field.ks_previous_period && ks_valid_date_selection.indexOf(ks_date_filter_selection) >= 0) {
                 var previous_period_data = kpi_data[0].previous_period;
@@ -1376,7 +1376,7 @@ class KsAIDashboardNinja extends Component { constructor(props) { super(props); 
                 }
                 var pre_acheive = pre_diffrence > 0 ? true : false;
                 pre_diffrence = Math.abs(pre_diffrence);
-                var pre_deviation = previous_period_data ? field_utils.format.integer(parseInt((pre_diffrence / previous_period_data) * 100)) + '%' : "100%"
+                var pre_deviation = previous_period_data ? Math.round(parseInt((pre_diffrence / previous_period_data) * 100)) + '%' : "100%"
             }
             if (item.ks_info){
                 var ks_description = item.ks_info.split('\n');
@@ -1398,7 +1398,7 @@ class KsAIDashboardNinja extends Component { constructor(props) { super(props); 
                     ks_icon_url = false;
                 }
             }
-//            parseInt(Math.round((count_1 / target_1) * 100)) ? field_utils.format.integer(Math.round((count_1 / target_1) * 100)) : "0"
+//            parseInt(Math.round((count_1 / target_1) * 100)) ? Math.round(Math.round((count_1 / target_1) * 100)) : "0"
             var target_progress_deviation = String(Math.round((count_1  / target_1) * 100));
              if(field.ks_multiplier_active){
                 var target_progress_deviation = String(Math.round(((count_1 * field.ks_multiplier) / target_1) * 100));
@@ -1433,7 +1433,7 @@ class KsAIDashboardNinja extends Component { constructor(props) { super(props); 
             }
 
             if (item_info.target_deviation === Infinity) item_info.target_arrow = false;
-            item_info.target_progress_deviation = parseInt(item_info.target_progress_deviation) ? field_utils.format.integer(parseInt(item_info.target_progress_deviation)) : "0"
+            item_info.target_progress_deviation = parseInt(item_info.target_progress_deviation) ? Math.round(parseInt(item_info.target_progress_deviation)) : "0"
             if (field.ks_multiplier_active){
                 item_info['count_1'] = KsGlobalFunction._onKsGlobalFormatter(kpi_data[0]['record_data'] * field.ks_multiplier, field.ks_data_formatting, field.ks_precision_digits);
                 item_info['count_1_tooltip'] = kpi_data[0]['record_data'] * field.ks_multiplier

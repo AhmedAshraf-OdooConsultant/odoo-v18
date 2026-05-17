@@ -3,15 +3,14 @@
 import { formatDate, parseDateTime } from "@web/core/l10n/dates";
 import { CharField } from "@web/views/fields/char/char_field";
 import { registry } from "@web/core/registry";
-import field_utils from 'web.field_utils';
+import { formatFloat } from "@web/views/fields/formatters";
 import { loadCSS,loadJS } from "@web/core/assets";
-import { qweb } from 'web.core';
-import core from 'web.core';
-import session from 'web.session';
+import { renderToString } from "@web/core/utils/render";
+import { user } from "@web/core/user";
 var KsGlobalFunction = require('ks_dashboard_ninja.KsGlobalFunction');
 
 
-const { useEffect, useRef, xml, onWillUpdateProps,onMounted,onWillStart} = owl;
+import { useEffect, useRef, xml, onWillUpdateProps, onMounted, onWillStart } from "@odoo/owl";
 
 
  export class KsGraphPreview extends CharField {
@@ -150,7 +149,7 @@ ksNumFormatter(num, digits) {
             if (si[i].symbol === 'M'){
 //                si[i].value = 1000000;
                 num = parseInt(num) / 1000000
-                num = field_utils.format.integer(num, Float64Array)
+                num = Math.round(num, Float64Array)
                 if (negative) {
                     return "-" + num + si[i].symbol;
                 } else {
@@ -158,9 +157,9 @@ ksNumFormatter(num, digits) {
                 }
                 }else{
                     if (num % 1===0){
-                    num = field_utils.format.integer(num, Float64Array)
+                    num = Math.round(num, Float64Array)
                     }else{
-                        num = field_utils.format.float(num, Float64Array, {digits:[0,ks_precision_digits]});
+                        num = parseFloat(num).toFixed(ks_precision_digits);
                     }
                     if (negative) {
                         return "-" + num;
@@ -174,7 +173,7 @@ ksNumFormatter(num, digits) {
             var self = this;
             if (ks_data_format == 'exact'){
 //                return ks_record_count;
-                return field_utils.format.float(ks_record_count, Float64Array, {digits: [0, ks_precision_digits]});
+                return parseFloat(ks_record_count).toFixed(ks_precision_digits);
             }else{
                 if (ks_data_format == 'indian'){
                     return self.ksNumIndianFormatter( ks_record_count, 1);
@@ -186,7 +185,7 @@ ksNumFormatter(num, digits) {
             }
         }
         ks_monetary(value, currency_id) {
-            var currency = session.get_currency(currency_id);
+            var currency = null /* session.get_currency removed in v18 */;
             if (!currency) {
                 return value;
             }
@@ -366,7 +365,7 @@ ksNumFormatter(num, digits) {
 
         }
 
-        var $chartContainer = $(qweb.render('ks_chart_form_view_container', {
+        var $chartContainer = $(renderToString('ks_chart_form_view_container', {
             ks_chart_name: ks_chart_name
 
         }));
@@ -683,10 +682,10 @@ ksNumFormatter(num, digits) {
                     } else if (ks_selection === 'custom') {
                         var ks_field = ks_self.chart_data.ks_field;
                         //                                                        ks_type = field_utils.format.char(ks_field);
-                        k_amount = field_utils.format.float(k_amount, Float64Array, {digits: [0, self.props.record.data.ks_precision_digits]});
+                        k_amount = parseFloat(k_amount).toFixed(self.props.record.data.ks_precision_digits);
                         return data.datasets[tooltipItem[0].datasetIndex]['label'] + " : " + k_amount + " " + ks_field;
                     } else {
-                        k_amount = field_utils.format.float(k_amount, Float64Array, {digits: [0, self.props.record.data.ks_precision_digits]});
+                        k_amount = parseFloat(k_amount).toFixed(self.props.record.data.ks_precision_digits);
                         return data.datasets[tooltipItem[0].datasetIndex]['label'] + " : " + k_amount
                     }
                 },
@@ -799,10 +798,10 @@ ksNumFormatter(num, digits) {
                         } else if (ks_selection === 'custom') {
                             var ks_field = ks_self.chart_data.ks_field;
                             // ks_type = field_utils.format.char(ks_field);
-                            k_amount = field_utils.format.float(k_amount, Float64Array, {digits: [0, self.props.record.data.ks_precision_digits]});
+                            k_amount = parseFloat(k_amount).toFixed(self.props.record.data.ks_precision_digits);
                             return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount + " " + ks_field;
                         } else {
-                            k_amount = field_utils.format.float(k_amount, Float64Array, {digits:[0,self.props.record.data.ks_precision_digits]});
+                            k_amount = parseFloat(k_amount).toFixed(self.props.record.data.ks_precision_digits);
                             return data.datasets[tooltipItem.datasetIndex]['label'] + " : " + k_amount
                         }
                     }

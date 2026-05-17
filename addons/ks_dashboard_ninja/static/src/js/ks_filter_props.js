@@ -408,8 +408,8 @@ return KsFilterProps.include({
                 var dateValue = [];
                 $(filter_container).find(".o_generator_menu_value .o_datepicker").each((index, $input_val) => {
                     var a = $($input_val).find("input").val();;
-                    var b = field_utils.parse[field_type](a, { field_type }, { timezone: true });
-                    var c = field_utils.format[field_type](b, { field_type }, { timezone: true });
+                    var b = a;
+                    var c = b;
                     domainValue.push(b.toJSON());
                     dateValue.push(c);
                 });

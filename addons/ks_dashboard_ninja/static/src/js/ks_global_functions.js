@@ -102,7 +102,7 @@ import { user } from "@web/core/user";
         },
 
         ks_monetary: function(value, currency_id) {
-            var currency = session.get_currency(currency_id);
+            var currency = null /* session.get_currency removed in v18 */;
             if (!currency) {
                 return value;
             }
@@ -116,7 +116,7 @@ import { user } from "@web/core/user";
         _onKsGlobalFormatter: function(ks_record_count, ks_data_format, ks_precision_digits){
             var self = this;
             if (ks_data_format == 'exact'){
-                return field_utils.format.float(ks_record_count, Float64Array,{digits:[0,ks_precision_digits]});
+                return parseFloat(ks_record_count).toFixed(ks_precision_digits);
             }else{
                 if (ks_data_format == 'indian'){
                     return self.ksNumIndianFormatter( ks_record_count, 1);
@@ -174,7 +174,7 @@ import { user } from "@web/core/user";
             if (si[i].symbol === 'M'){
 //                si[i].value = 1000000;
                 num = parseInt(num) / 1000000
-                num = field_utils.format.integer(num, Float64Array)
+                num = Math.round(num, Float64Array)
                 if (negative) {
                     return "-" + num + si[i].symbol;
                 } else {
@@ -182,9 +182,9 @@ import { user } from "@web/core/user";
                 }
                 }else{
                     if (num % 1===0){
-                    num = field_utils.format.integer(num, Float64Array)
+                    num = Math.round(num, Float64Array)
                     }else{
-                        num = field_utils.format.float(num, Float64Array, {digits:[0,ks_precision_digits]});
+                        num = parseFloat(num).toFixed(ks_precision_digits);
                     }
                     if (negative) {
                         return "-" + num;

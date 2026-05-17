@@ -7,8 +7,8 @@ import { registry } from "@web/core/registry";
 import { loadJS, loadCSS } from "@web/core/assets";
 import { useService } from "@web/core/utils/hooks";
 import { CharField } from "@web/views/fields/char/char_field";
-import { qweb } from 'web.core';
-const { Component, onWillUnmount, onWillUpdateProps, useEffect, useRef, useState, onMounted } = owl;
+import { renderToString } from "@web/core/utils/render";
+import { Component, onWillUnmount, onWillUpdateProps, useEffect, useRef, useState, onMounted } from "@odoo/owl";
 
 
 export class KsMapPreview extends Component {

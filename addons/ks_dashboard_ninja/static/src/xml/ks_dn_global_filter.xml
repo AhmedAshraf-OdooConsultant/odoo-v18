@@ -2,7 +2,7 @@
 <templates>
 
 
-    <t t-name="ks_dn_filter_section_container_template">
+    <t t-name="ks_dn_filter_section_container_template" owl="1">
         <div t-att-data-ks-model-selector="ks_model" class="ks_dn_filter_section_container">
             <span class="ks_dn_filter_section_container_label">
                 <t t-esc="ks_domain_data.model_name"/>
@@ -31,7 +31,7 @@
         </div>
     </t>
 
-    <t t-name="ks_dn_custom_filter_input_container">
+    <t t-name="ks_dn_custom_filter_input_container" owl="1">
         <div t-att-class="show_remove_option ? 'ks_dn_or_container ks_dn_custom_filter_input_container_section': 'ks_dn_custom_filter_input_container_section'">
             <t t-if="show_remove_option">
                 <span class="o_or_filter">or</span>
@@ -53,7 +53,7 @@
         </div>
     </t>
 
-    <t t-name="ks_dn_custom_domain_input_operator">
+    <t t-name="ks_dn_custom_domain_input_operator" owl="1">
         <select class="o_input o_generator_menu_operator ks_operator_option_selector">
             <t t-foreach="operators" t-as="operator">
                 <option t-att-value="operator['symbol']">
@@ -63,17 +63,17 @@
         </select>
     </t>
 
-    <t t-name="ks_dn_custom_domain_input_text">
+    <t t-name="ks_dn_custom_domain_input_text" owl="1">
         <span class="o_generator_menu_value">
             <input type="text" value="" class="o_input"/>
         </span>
     </t>
 
-    <t t-name="ks_dn_custom_domain_input_date">
+    <t t-name="ks_dn_custom_domain_input_date" owl="1">
         <span class="o_generator_menu_value"/>
     </t>
 
-    <t t-name="ks_dn_custom_domain_input_selection">
+    <t t-name="ks_dn_custom_domain_input_selection" owl="1">
         <select class="o_input o_generator_menu_value">
             <t t-foreach="selection_input" t-as="selection_data">
                 <option t-att-value="selection_data[0]">
