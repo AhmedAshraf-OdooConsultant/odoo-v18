@@ -1,3 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_akshab_pos_sales_report_wizard_user,access.akshab.pos.sales.report.wizard.user,model_akshab_pos_sales_report_wizard,point_of_sale.group_pos_user,1,1,1,1
-access_akshab_pos_sales_report_wizard_account,access.akshab.pos.sales.report.wizard.account,model_akshab_pos_sales_report_wizard,account.group_account_invoice,1,1,1,1
