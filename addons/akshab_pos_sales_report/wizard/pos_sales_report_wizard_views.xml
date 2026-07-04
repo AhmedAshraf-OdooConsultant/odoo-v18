@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_akshab_pos_sales_report_wizard_form" model="ir.ui.view">
+        <field name="name">akshab.pos.sales.report.wizard.form</field>
+        <field name="model">akshab.pos.sales.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="تقرير مبيعات التجزئة">
+                <group>
+                    <group string="الفترة">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <group string="الفروع">
+                        <field name="config_ids" widget="many2many_tags"
+                               options="{'no_create': True}" nolabel="1" colspan="2"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print_report" string="طباعة التقرير"
+                            type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="إلغاء" class="btn-secondary"
+                            special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_akshab_pos_sales_report_wizard" model="ir.actions.act_window">
+        <field name="name">تقرير مبيعات التجزئة</field>
+        <field name="res_model">akshab.pos.sales.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_akshab_pos_sales_report"
+              name="تقرير مبيعات التجزئة"
+              parent="point_of_sale.menu_point_rep"
+              action="action_akshab_pos_sales_report_wizard"
+              sequence="5"/>
+</odoo>
