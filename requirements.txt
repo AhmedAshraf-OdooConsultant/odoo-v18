@@ -1,2 +1,3 @@
 # Python dependencies for Odoo
 psycopg2-binary
+pypdf
