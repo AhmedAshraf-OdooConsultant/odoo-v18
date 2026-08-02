@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_akshab_pos_period_report_wizard_form" model="ir.ui.view">
+        <field name="name">akshab.pos.period.report.wizard.form</field>
+        <field name="model">akshab.pos.period.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="تقرير المبيعات للفترة">
+                <group>
+                    <group string="الفترة">
+                        <field name="period_start"/>
+                        <field name="period_end"/>
+                        <field name="comparison_mode"/>
+                        <field name="date_from" readonly="1"/>
+                        <field name="date_to" readonly="1"/>
+                    </group>
+                    <group string="قنوات البيع">
+                        <field name="config_ids" widget="many2many_tags"
+                               options="{'no_create': True}" nolabel="1" colspan="2"/>
+                        <field name="online_move_ids" widget="many2many_tags"
+                               groups="account.group_account_invoice"
+                               options="{'no_create': True}"
+                               placeholder="فواتير Online Store لفترة التقرير (اختياري)"/>
+                        <field name="online_move_prev_ids" widget="many2many_tags"
+                               groups="account.group_account_invoice"
+                               options="{'no_create': True}"
+                               placeholder="فواتير Online Store لفترة المقارنة (اختياري)"/>
+                        <field name="online_move_m2_ids" widget="many2many_tags"
+                               groups="account.group_account_invoice"
+                               options="{'no_create': True}"
+                               placeholder="فواتير Online Store للفترة الثالثة - للاتجاه (اختياري)"/>
+                        <field name="online_move_m3_ids" widget="many2many_tags"
+                               groups="account.group_account_invoice"
+                               options="{'no_create': True}"
+                               placeholder="فواتير Online Store للفترة الرابعة - للاتجاه (اختياري)"/>
+                        <field name="b2b_move_ids" widget="many2many_tags"
+                               groups="account.group_account_invoice"
+                               options="{'no_create': True}"
+                               placeholder="فواتير قناة B2B لفترة التقرير (اختياري)"/>
+                        <field name="b2b_move_prev_ids" widget="many2many_tags"
+                               groups="account.group_account_invoice"
+                               options="{'no_create': True}"
+                               placeholder="فواتير قناة B2B لفترة المقارنة (اختياري)"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print_report" string="طباعة التقرير"
+                            type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="إلغاء" class="btn-secondary"
+                            special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_akshab_pos_period_report_wizard" model="ir.actions.act_window">
+        <field name="name">تقرير المبيعات للفترة</field>
+        <field name="res_model">akshab.pos.period.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_akshab_pos_period_report"
+              name="تقرير المبيعات للفترة"
+              parent="point_of_sale.menu_point_rep"
+              action="action_akshab_pos_period_report_wizard"
+              groups="point_of_sale.group_pos_manager"
+              sequence="8"/>
+</odoo>

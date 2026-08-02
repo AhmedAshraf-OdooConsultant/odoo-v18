@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- قالب تقرير الفترة: يعيد استخدام قالب التقرير الشهري نفسه -->
+    <template id="report_pos_period_doc">
+        <t t-call="akshab_pos_sales_report.report_pos_monthly_doc"/>
+    </template>
+
+    <record id="action_report_pos_period" model="ir.actions.report">
+        <field name="name">تقرير المبيعات للفترة</field>
+        <field name="model">akshab.pos.period.report.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">akshab_pos_sales_report.report_pos_period_doc</field>
+        <field name="report_file">akshab_pos_sales_report.report_pos_period_doc</field>
+        <field name="paperformat_id" ref="akshab_pos_sales_report.paperformat_akshab_pos_sales"/>
+    </record>
+</odoo>
