@@ -1,0 +1,1025 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_pos_monthly_doc">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+                <div class="page" dir="rtl">
+                    <style>
+                        @font-face {
+                            font-family: 'Tajawal';
+                            src: url('/akshab_pos_sales_report/static/fonts/Tajawal-Regular.ttf') format('truetype');
+                            font-weight: normal;
+                            font-style: normal;
+                        }
+                        @font-face {
+                            font-family: 'Tajawal';
+                            src: url('/akshab_pos_sales_report/static/fonts/Tajawal-Medium.ttf') format('truetype');
+                            font-weight: 500;
+                            font-style: normal;
+                        }
+                        @font-face {
+                            font-family: 'Tajawal';
+                            src: url('/akshab_pos_sales_report/static/fonts/Tajawal-Bold.ttf') format('truetype');
+                            font-weight: bold;
+                            font-style: normal;
+                        }
+                        .akshab-report {
+                            direction: rtl;
+                            text-align: right;
+                            font-family: 'Tajawal', 'Noto Naskh Arabic', 'DejaVu Sans', sans-serif;
+                            color: #26312B;
+                            font-size: 15px;
+                        }
+                        .akshab-report table { direction: rtl; }
+                        /* ---------- الترويسة (divs عائمة - بدون جدول = استحالة ظهور خطوط) ---------- */
+                        .ak-header { width: 100%; overflow: hidden; margin-bottom: 16px; }
+                        .ak-header-titles { float: right; text-align: right; }
+                        .ak-header-logo { float: left; text-align: left; }
+                        .ak-logo { max-height: 76px; max-width: 230px; }
+                        .ak-title { font-size: 32px; font-weight: bold; color: #1B4332; margin: 0; line-height: 1.25; border: 0 !important; }
+                        .ak-subtitle { font-size: 15px; color: #C6A46C; font-weight: bold; margin: 3px 0 0 0; letter-spacing: 3px; border: 0 !important; }
+                        /* ---------- مؤشرات الأداء ---------- */
+                        .akshab-report .ak-kpi-table { width: 100%; border-collapse: separate; border-spacing: 5px 0; margin: 4px 0 10px 0; border: 0 !important; }
+                        .akshab-report .ak-kpi-table td {
+                            background-color: #F7F4EE;
+                            border: 0 !important;
+                            border-top: 3px solid #C6A46C !important;
+                            border-bottom: 1px solid #E5DECF !important;
+                            padding: 11px 6px 9px 6px;
+                            text-align: center;
+                            width: 14.28%;
+                        }
+                        .ak-kpi-value { font-size: 19px; font-weight: bold; color: #1B4332; direction: ltr; unicode-bidi: embed; white-space: nowrap; }
+                        .ak-kpi-value-rtl { font-size: 19px; font-weight: bold; color: #1B4332; direction: rtl; white-space: nowrap; }
+                        .ak-kpi-label { font-size: 12.5px; color: #7A6A45; font-weight: 500; margin-top: 3px; }
+                        /* ---------- صندوق معلومات الفترة ---------- */
+                        .akshab-report .ak-info-box { width: 100%; border-collapse: collapse; margin-bottom: 10px; background-color: #FDFCF9; }
+                        .akshab-report .ak-info-box td { padding: 9px 15px; font-size: 14.5px; border: 1px solid #E5DECF !important; }
+                        .akshab-report .ak-info-box td.ak-info-label { color: #1B4332; font-weight: bold; white-space: nowrap; width: 1%; background-color: #EFE9DC; }
+                        /* ---------- منع انفصال العنوان عن محتواه بين الصفحات ---------- */
+                        .ak-keep { page-break-inside: avoid; }
+                        .ak-page-start { page-break-before: always; }
+                        .ak-charts { width: 100%; border-collapse: collapse; margin-top: 26px; }
+                        .ak-charts td.ak-chart-cell { width: 50%; vertical-align: top; padding: 0 7px; }
+                        .ak-chart-box { background-color: #FDFCF9; border: 1px solid #E5DECF; padding: 10px 14px 10px 14px; }
+                        .ak-chart-title { font-size: 14px; font-weight: bold; color: #1B4332; margin-bottom: 8px; padding-bottom: 5px; border-bottom: 2px solid #C6A46C; }
+                        .ak-hbar-row { margin: 5px 0; white-space: nowrap; }
+                        .ak-hbar-label { display: inline-block; width: 34%; font-size: 11.5px; line-height: 1.2; color: #26312B; vertical-align: middle; overflow: hidden; white-space: nowrap; }
+                        .ak-hbar-track { display: inline-block; width: 38%; background-color: #EFE9DC; height: 12px; vertical-align: middle; }
+                        .ak-hbar-fill { height: 12px; background-color: #1B4332; }
+                        .ak-hbar-val { display: inline-block; width: 25%; font-size: 10.5px; color: #52604F; text-align: left; vertical-align: middle; direction: ltr; white-space: nowrap; }
+                        .ak-cols { width: 100%; border-collapse: collapse; margin-top: 4px; }
+                        .ak-cols td { text-align: center; vertical-align: bottom; padding: 0 5px; }
+                        .ak-colbar { margin: 0 auto; width: 32px; background-color: #1B4332; }
+                        .ak-colbar-gold { margin: 0 auto; width: 32px; background-color: #C6A46C; }
+                        .ak-col-val { font-size: 10.5px; color: #52604F; padding-bottom: 3px; direction: ltr; }
+                        .ak-cols .ak-col-label { font-size: 11.5px; font-weight: bold; color: #26312B; padding-top: 5px; border-top: 2px solid #1B4332; vertical-align: top; }
+                        .ak-section-block { margin-top: 26px; }
+                        /* ---------- عناوين الأقسام ---------- */
+                        .ak-section-title {
+                            background-color: #1B4332; color: #FFFFFF;
+                            font-size: 18.5px; font-weight: bold;
+                            padding: 10px 17px; margin: 26px 0 0 0;
+                            border-right: 6px solid #C6A46C;
+                            page-break-after: avoid;
+                        }
+                        .akshab-report .ak-table caption.ak-section-caption {
+                            caption-side: top;
+                            background-color: #1B4332; color: #FFFFFF;
+                            font-size: 18.5px; font-weight: bold;
+                            padding: 10px 17px; text-align: right;
+                            border-right: 6px solid #C6A46C;
+                            margin: 0;
+                        }
+                        .ak-table thead tr { page-break-inside: avoid; }
+                        .akshab-report .ak-section-table { margin-top: 26px; }
+                        .ak-section-num {
+                            display: inline-block; color: #C6A46C; font-weight: bold; margin-left: 10px;
+                        }
+                        /* ---------- الجداول ---------- */
+                        .akshab-report .ak-table { width: 100%; border-collapse: collapse; margin-top: 0; }
+                        .akshab-report .ak-table th {
+                            background-color: #1B4332; color: #FFFFFF;
+                            padding: 10px 8px; font-size: 15px; font-weight: bold;
+                            border: 1px solid #143226 !important; text-align: center;
+                        }
+                        .akshab-report .ak-table td {
+                            padding: 8px 8px; font-size: 14.5px;
+                            border: 1px solid #DDD6C7 !important; text-align: center;
+                        }
+                        .akshab-report .ak-table td.ak-right { text-align: right; }
+                        .akshab-report .ak-table tr:nth-child(even) td { background-color: #F7F4EE; }
+                        .ak-table tr { page-break-inside: avoid; }
+                        .ak-table thead { display: table-header-group; page-break-inside: avoid; }
+                        .akshab-report .ak-total-row td {
+                            background-color: #EAE0CC !important; color: #1B4332;
+                            font-weight: bold; font-size: 14.5px;
+                            border-top: 2px solid #C6A46C !important;
+                        }
+                        .akshab-report .ak-subtotal-row td {
+                            background-color: #F0E9DA !important; color: #1B4332;
+                            font-weight: bold; font-size: 14px;
+                        }
+                        .akshab-report .ak-cat-row td {
+                            background-color: #2D5443 !important; color: #FFFFFF;
+                            font-weight: bold; text-align: right; font-size: 14.5px;
+                        }
+                        .akshab-report .ak-cat-row td.ak-num { text-align: center; }
+                        .ak-pos-band {
+                            background-color: #C6A46C; color: #1B4332;
+                            font-weight: bold; font-size: 16px;
+                            padding: 8px 15px; margin: 18px 0 0 0;
+                            page-break-after: avoid;
+                        }
+                        /* شريط أبرز مؤشرات الشهر في لوحة المؤشرات البصرية */
+                        .akshab-report .ak-hl-table { width: 100%; table-layout: fixed; border-collapse: separate; border-spacing: 5px 0; margin: 10px 0 4px 0; border: 0 !important; }
+                        .akshab-report .ak-hl-table td {
+                            background-color: #FDFCF9;
+                            border: 0 !important;
+                            border-top: 3px solid #1B4332 !important;
+                            border-bottom: 1px solid #E5DECF !important;
+                            padding: 8px 6px 7px 6px;
+                            text-align: center; vertical-align: top;
+                        }
+                        .ak-hl-label { font-size: 11.5px; color: #52604F; font-weight: bold; margin-bottom: 4px; }
+                        .ak-hl-value { font-size: 13.5px; font-weight: bold; color: #1B4332; }
+                        .ak-hl-sub { font-size: 11px; color: #7A6A45; margin-top: 3px; }
+                        .akshab-report .ak-hl-table-gold { margin-top: 5px; }
+                        .akshab-report .ak-hl-table-gold td { border-top: 3px solid #C6A46C !important; }
+                        /* القسم التنفيذي: مقارنة فئات ومنتجات كل قناة */
+                        .akshab-report .ak-table th.ak-group {
+                            background-color: #143226;
+                            border-bottom: 2px solid #C6A46C !important;
+                        }
+                        .ak-exec-caption {
+                            font-size: 14px; font-weight: bold; color: #1B4332;
+                            margin: 12px 0 5px 0; padding-right: 9px;
+                            border-right: 4px solid #C6A46C;
+                            page-break-after: avoid;
+                        }
+                        /* بطاقات الملخص التنفيذي (الصفحة الأولى) */
+                        .akshab-report .ak-exec-grid { width: 100%; border-collapse: separate; border-spacing: 6px; margin-top: 4px; }
+                        .akshab-report .ak-exec-grid tr { page-break-inside: avoid; }
+                        .akshab-report .ak-exec-grid td {
+                            width: 50%; vertical-align: top;
+                            background-color: #FDFCF9;
+                            border: 1px solid #E5DECF !important;
+                            border-top: 3px solid #C6A46C !important;
+                            padding: 10px 14px 8px 14px;
+                        }
+                        .ak-exec-card-title {
+                            font-size: 14.5px; font-weight: bold; color: #1B4332;
+                            border-bottom: 1px solid #E5DECF;
+                            padding-bottom: 5px; margin-bottom: 6px;
+                        }
+                        /* صندوق الخلاصة التنفيذية */
+                        .ak-exec-summary {
+                            background-color: #FDFCF9;
+                            border: 1px solid #E5DECF;
+                            border-right: 6px solid #C6A46C;
+                            padding: 13px 18px; margin-top: 8px;
+                        }
+                        .ak-exec-line { font-size: 13px; color: #26312B; margin: 4px 0; line-height: 1.45; }
+                        .ak-exec-dot { color: #C6A46C; font-size: 11px; margin-left: 8px; }
+                        .ak-exec-dot.ak-up { color: #1E7A45; }
+                        .ak-exec-dot.ak-down { color: #B0413E; }
+                        /* الجداول العريضة الموزعة على القنوات (خط أصغر وأعمدة مضغوطة) */
+                        .akshab-report .ak-wide th { padding: 6px 3px; font-size: 10.5px; }
+                        .akshab-report .ak-wide td { padding: 5px 3px; font-size: 10px; }
+                        .akshab-report .ak-wide th.ak-group {
+                            background-color: #143226; font-size: 11.5px;
+                            border-bottom: 2px solid #C6A46C !important;
+                        }
+                        .akshab-report .ak-wide .ak-total-row td { font-size: 10.5px; }
+                        .ak-empty { color: #8A8A8A; font-size: 14px; padding: 12px 6px; font-style: italic; }
+                        .ak-amount { direction: ltr; unicode-bidi: embed; white-space: nowrap; }
+                        .ak-badge-new { color: #1B4332; font-weight: bold; }
+                        .ak-badge-old { color: #7A6A45; font-weight: bold; }
+                        /* ---------- إضافات التقرير الأسبوعي ---------- */
+                        .akshab-report .ak-best-row td {
+                            background-color: #F3E9D2 !important;
+                            border-top: 1px solid #C6A46C !important;
+                            border-bottom: 1px solid #C6A46C !important;
+                            font-weight: bold; color: #1B4332;
+                        }
+                        .ak-best-badge { color: #C6A46C; font-weight: bold; float: left; direction: rtl; }
+                        .ak-up { color: #1B4332; font-weight: bold; }
+                        .ak-down { color: #A94438; font-weight: bold; }
+                        .ak-flat { color: #7A6A45; font-weight: bold; }
+                        .akshab-report .ak-matrix th { font-size: 13px; padding: 8px 3px; }
+                        .akshab-report .ak-matrix td { font-size: 13.5px; padding: 8px 3px; }
+                        .ak-rank { color: #C6A46C; font-weight: bold; }
+                    </style>
+
+                    <div class="akshab-report">
+                        <!-- ==================== الترويسة ==================== -->
+                        <div class="ak-header">
+                            <div class="ak-header-titles">
+                                <p class="ak-title">تقرير المبيعات الشهري</p>
+                                <p class="ak-subtitle">MONTHLY SALES REPORT</p>
+                            </div>
+                            <div class="ak-header-logo">
+                                <t t-set="company" t-value="docs.env.company"/>
+                                <img t-if="company.logo" class="ak-logo"
+                                     t-att-src="image_data_uri(company.logo)"/>
+                                <p t-else="" class="ak-title" t-out="data.get('company_name')"/>
+                            </div>
+                        </div>
+
+                        <!-- ==================== مؤشرات الأداء التنفيذية ==================== -->
+                        <table t-if="data.get('has_data')" class="ak-kpi-table">
+                            <tr>
+                                <td>
+                                    <div class="ak-kpi-value" t-out="data['kpis']['gross_fmt']"/>
+                                    <div class="ak-kpi-label">إجمالي المبيعات (ر.س)</div>
+                                </td>
+                                <td>
+                                    <div class="ak-kpi-value" t-out="data['kpis']['refunds_fmt']"/>
+                                    <div class="ak-kpi-label">المرتجعات (ر.س)</div>
+                                </td>
+                                <td>
+                                    <div class="ak-kpi-value" t-out="data['kpis']['net_fmt']"/>
+                                    <div class="ak-kpi-label">صافي المبيعات (ر.س)</div>
+                                </td>
+                                <td>
+                                    <div class="ak-kpi-value" t-out="data['kpis']['invoices']"/>
+                                    <div class="ak-kpi-label">عدد الفواتير</div>
+                                </td>
+                                <td>
+                                    <div class="ak-kpi-value" t-out="data['kpis']['avg_fmt']"/>
+                                    <div class="ak-kpi-label">متوسط الفاتورة (ر.س)</div>
+                                </td>
+                                <td>
+                                    <div class="ak-kpi-value" t-out="data['kpis']['discounts_fmt']"/>
+                                    <div class="ak-kpi-label">إجمالي الخصومات (ر.س)</div>
+                                </td>
+                                <td>
+                                    <div class="ak-kpi-value-rtl">&#8207;<t t-out="data['kpis']['customers_display']"/></div>
+                                    <div class="ak-kpi-label">عدد العملاء</div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="ak-info-box">
+                            <tr>
+                                <td class="ak-info-label">الشهر</td>
+                                <td t-out="data.get('month_label')"/>
+                                <td class="ak-info-label">الفترة</td>
+                                <td>من <span class="ak-amount" t-out="data.get('month_from')"/> إلى <span class="ak-amount" t-out="data.get('month_to')"/></td>
+                            </tr>
+                            <tr>
+                                <td class="ak-info-label">قنوات البيع</td>
+                                <td colspan="3" t-out="data.get('config_names')"/>
+                            </tr>
+                            <tr>
+                                <td class="ak-info-label">تاريخ الطباعة</td>
+                                <td><span class="ak-amount" t-out="data.get('printed_on')"/></td>
+                                <td class="ak-info-label">العملة</td>
+                                <td>ريال سعودي (<t t-out="data.get('currency')"/>)</td>
+                            </tr>
+                        </table>
+
+                        <t t-if="not data.get('has_data')">
+                            <p class="ak-empty">لا توجد عمليات بيع ضمن الشهر وقنوات البيع المحددة.</p>
+                        </t>
+
+                        <t t-if="data.get('has_data')">
+                        <!-- ==================== الملخص التنفيذي (الصفحة الأولى) ==================== -->
+                        <div t-if="data.get('exec_summary') and data['exec_summary']['card_rows']">
+                        <div class="ak-section-title" style="margin-top: 10px;">الملخص التنفيذي — أبرز نتائج الشهر</div>
+                        <table class="ak-exec-grid">
+                            <tr t-foreach="data['exec_summary']['card_rows']" t-as="crow">
+                                <td t-foreach="crow" t-as="card" t-att-colspan="'2' if len(crow) == 1 else None">
+                                    <div class="ak-exec-card-title" t-out="card['title']"/>
+                                    <div t-foreach="card['lines']" t-as="line" class="ak-exec-line">
+                                        <span t-att-class="'ak-exec-dot ' + line['cls'] if line['cls'] else 'ak-exec-dot'">◆</span>
+                                        <span t-out="line['text']"/>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        </div>
+
+                        <!-- ==================== لوحة المؤشرات البصرية (صفحة مستقلة) ==================== -->
+                        <div class="ak-page-start"></div>
+                        <div class="ak-keep">
+                        <div class="ak-section-title">لوحة المؤشرات البصرية</div>
+                        <table class="ak-hl-table">
+                            <tr>
+                                <td t-foreach="data['charts']['highlights']" t-as="hl">
+                                    <div class="ak-hl-label" t-out="hl['label']"/>
+                                    <div t-att-class="'ak-hl-value ' + hl['cls'] if hl['cls'] else 'ak-hl-value'"><span t-att-class="'ak-amount' if hl['is_amount'] else None" t-out="hl['value']"/></div>
+                                    <div class="ak-hl-sub"><span class="ak-amount" t-out="hl['sub']"/></div>
+                                </td>
+                            </tr>
+                        </table>
+                        <table t-if="data['charts'].get('highlights2')" class="ak-hl-table ak-hl-table-gold">
+                            <tr>
+                                <td t-foreach="data['charts']['highlights2']" t-as="hl">
+                                    <div class="ak-hl-label" t-out="hl['label']"/>
+                                    <div t-att-class="'ak-hl-value ' + hl['cls'] if hl['cls'] else 'ak-hl-value'"><span t-att-class="'ak-amount' if hl['is_amount'] else None" t-out="hl['value']"/></div>
+                                    <div class="ak-hl-sub"><span class="ak-amount" t-out="hl['sub']"/></div>
+                                </td>
+                            </tr>
+                        </table>
+                        <table class="ak-charts" style="margin-top: 8px;">
+                            <tr>
+                                <td class="ak-chart-cell">
+                                    <div class="ak-chart-box">
+                                        <div class="ak-chart-title">صافي المبيعات حسب قناة البيع</div>
+                                        <div t-foreach="data['charts']['channels']" t-as="bar" class="ak-hbar-row">
+                                            <span class="ak-hbar-label" t-out="bar['name']"/>
+                                            <span class="ak-hbar-track"><span class="ak-hbar-fill" t-att-style="'display: inline-block; width: ' + bar['width'] + '; background-color: ' + bar['color'] + ';'"> </span></span>
+                                            <span class="ak-hbar-val"><t t-out="bar['value_fmt']"/> (<t t-out="bar['share_fmt']"/>)</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="ak-chart-cell">
+                                    <div class="ak-chart-box">
+                                        <div class="ak-chart-title">اتجاه صافي المبيعات - آخر 4 أشهر (جميع القنوات)</div>
+                                        <table class="ak-cols">
+                                            <tr>
+                                                <td t-foreach="data['charts']['trend']" t-as="col">
+                                                    <div class="ak-col-val" t-out="col['value_fmt']"/>
+                                                    <div t-att-class="'ak-colbar-gold' if col['is_current'] else 'ak-colbar'" t-att-style="'height: ' + col['h'] + ';'"> </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td t-foreach="data['charts']['trend']" t-as="col" class="ak-col-label" t-out="col['label']"/>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        </div>
+                        <div class="ak-keep">
+                        <table class="ak-charts" style="margin-top: 12px;">
+                            <tr>
+                                <td class="ak-chart-cell">
+                                    <div class="ak-chart-box">
+                                        <div class="ak-chart-title">أعلى الفئات مبيعاً</div>
+                                        <div t-foreach="data['charts']['categories']" t-as="bar" class="ak-hbar-row">
+                                            <span class="ak-hbar-label" t-out="bar['name']"/>
+                                            <span class="ak-hbar-track"><span class="ak-hbar-fill" t-att-style="'display: inline-block; width: ' + bar['width'] + ';'"> </span></span>
+                                            <span class="ak-hbar-val"><t t-out="bar['value_fmt']"/> (<t t-out="bar['share_fmt']"/>)</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="ak-chart-cell">
+                                    <div class="ak-chart-box">
+                                        <div class="ak-chart-title">أعلى المنتجات مبيعاً</div>
+                                        <div t-foreach="data['charts']['products']" t-as="bar" class="ak-hbar-row">
+                                            <span class="ak-hbar-label" t-out="bar['name']"/>
+                                            <span class="ak-hbar-track"><span class="ak-hbar-fill" t-att-style="'display: inline-block; width: ' + bar['width'] + '; background-color: #C6A46C;'"> </span></span>
+                                            <span class="ak-hbar-val"><t t-out="bar['value_fmt']"/></span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                        </div>
+
+                        
+                        <div class="ak-page-start"></div>
+                        <!-- ==================== القسم 1: مقارنة مبيعات قنوات البيع بالشهر السابق ==================== -->
+                        <div class="ak-keep">
+                        <div class="ak-section-title"><span class="ak-section-num">١</span> مقارنة مبيعات قنوات البيع بالشهر السابق — صافي المبيعات (<t t-out="data['currency']"/>)</div>
+                        <table class="ak-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 18%;">البيان</th>
+                                    <t t-foreach="data['channel_sales_comparison']['headers']" t-as="h">
+                                        <th t-att-style="'width: ' + data['channel_sales_comparison']['col_width'] + ';'" t-out="h"/>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="data['channel_sales_comparison']['rows']" t-as="row">
+                                    <td class="ak-right" t-out="row['label']"/>
+                                    <t t-foreach="row['cells']" t-as="cell">
+                                        <td><span t-att-class="cell['class'] or None"><span class="ak-amount" t-out="cell['text']"/></span></td>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p t-if="data['channel_sales_comparison'].get('online_note')" class="ak-empty">لمقارنة قناة Online Store بالشهر السابق: اختر فواتير المتجر الإلكتروني للشهر السابق في معالج التقرير.</p>
+                        </div>
+
+                        <!-- ==================== القسم 2: مقارنة بالشهر السابق ==================== -->
+                        <div class="ak-keep">
+                        <div class="ak-section-title"><span class="ak-section-num">٢</span> مقارنة بالشهر السابق</div>
+                        <table class="ak-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 28%;">المؤشر</th>
+                                    <th style="width: 20%;">هذا الشهر</th>
+                                    <th style="width: 20%;">الشهر السابق</th>
+                                    <th style="width: 17%;">التغير</th>
+                                    <th style="width: 15%;">نسبة التغير</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="data['channel_comparison']['rows']" t-as="row">
+                                    <td class="ak-right" t-out="row['label']"/>
+                                    <td><span class="ak-amount" t-out="row['current_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['previous_fmt']"/></td>
+                                    <td><span t-att-class="row['class']"><span class="ak-amount" t-out="row['diff_fmt']"/></span></td>
+                                    <td><span t-att-class="row['class']"><span class="ak-amount" t-out="row['pct_fmt']"/></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p t-if="data['channel_comparison'].get('online_note')" class="ak-empty">أرقام «هذا الشهر» تشمل قناة Online Store، بينما «الشهر السابق» بدونها — لمقارنة متكافئة اختر فواتير المتجر الإلكتروني للشهر السابق في معالج التقرير.</p>
+                        </div>
+
+                        <!-- ==================== القسم الأسبوعي 3: اتجاه آخر 4 أسابيع ==================== -->
+                        <div class="ak-keep">
+                        <div class="ak-section-title"><span class="ak-section-num">٣</span> اتجاه آخر 4 أشهر (جميع القنوات)</div>
+                        <table class="ak-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 24%;">الشهر</th>
+                                    <th style="width: 14%;">صافي المبيعات (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 10%;">النمو</th>
+                                    <th style="width: 10%;">عدد الفواتير</th>
+                                    <th style="width: 14%;">متوسط الفاتورة</th>
+                                    <th style="width: 10%;">عدد العملاء (نقاط البيع)</th>
+                                    <th style="width: 18%;">الخصومات (<t t-out="data['currency']"/>)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="data['trend']['rows']" t-as="row"
+                                    t-att-class="'ak-best-row' if row['is_current'] else None">
+                                    <td class="ak-right">
+                                        <span t-if="row['is_current']" class="ak-best-badge">◆ الحالي</span>
+                                        <t t-out="row['label']"/>
+                                    </td>
+                                    <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                    <td><span t-att-class="row['growth_class']"><span class="ak-amount" t-out="row['growth_fmt']"/></span></td>
+                                    <td t-out="row['count']"/>
+                                    <td><span class="ak-amount" t-out="row['avg_fmt']"/></td>
+                                    <td t-out="row['customers']"/>
+                                    <td><span class="ak-amount" t-out="row['discounts_fmt']"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <div class="ak-page-start"></div>
+                        <!-- ==================== القسم الأسبوعي 4: مصفوفة الفروع × الأيام ==================== -->
+                        <div class="ak-keep">
+                        <div class="ak-section-title"><span class="ak-section-num">٤</span> صافي المبيعات الأسبوعية حسب قناة البيع (<t t-out="data['currency']"/>)</div>
+                        <table class="ak-table ak-matrix">
+                            <thead>
+                                <tr>
+                                    <th style="width: 16%;">قناة البيع</th>
+                                    <t t-foreach="data['matrix']['headers']" t-as="h">
+                                        <th t-att-style="'width: ' + data['matrix']['col_width'] + ';'"><t t-out="h['title']"/><br/><span class="ak-amount" t-out="h['range_fmt']"/></th>
+                                    </t>
+                                    <th t-att-style="'width: ' + data['matrix']['col_width'] + ';'">الإجمالي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="data['matrix']['rows']" t-as="row">
+                                    <td class="ak-right" t-out="row['name']"/>
+                                    <t t-foreach="row['cells']" t-as="cell">
+                                        <td><span class="ak-amount" t-out="cell"/></td>
+                                    </t>
+                                    <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                </tr>
+                                <tr class="ak-total-row">
+                                    <td class="ak-right">الإجمالي الأسبوعي</td>
+                                    <t t-foreach="data['matrix']['day_totals']" t-as="cell">
+                                        <td><span class="ak-amount" t-out="cell"/></td>
+                                    </t>
+                                    <td><span class="ak-amount" t-out="data['matrix']['grand_fmt']"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <!-- ==================== القسم الأسبوعي 4: إجمالي المبيعات حسب الفرع ==================== -->
+                        <div class="ak-keep">
+                        <div class="ak-section-title"><span class="ak-section-num">٥</span> إجمالي المبيعات حسب قناة البيع</div>
+                        <table class="ak-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 17%;">قناة البيع</th>
+                                    <th style="width: 13%;">صافي المبيعات (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 8%;">النسبة</th>
+                                    <th style="width: 10%;">عدد الفواتير</th>
+                                    <th style="width: 11%;">متوسط الفاتورة</th>
+                                    <th style="width: 13%;">إجمالي الخصومات (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 10%;">عدد العملاء</th>
+                                    <th style="width: 9%;">عملاء جدد</th>
+                                    <th style="width: 9%;">عملاء قدامى</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="data['section1']['rows']" t-as="row">
+                                    <td class="ak-right" t-out="row['name']"/>
+                                    <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['share_fmt']"/></td>
+                                    <td t-out="row['count']"/>
+                                    <td><span class="ak-amount" t-out="row['avg_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['discounts_fmt']"/></td>
+                                    <td t-out="row['customers']"/>
+                                    <td class="ak-badge-new" t-out="row['new']"/>
+                                    <td class="ak-badge-old" t-out="row['old']"/>
+                                </tr>
+                                <tr class="ak-total-row">
+                                    <td class="ak-right">الإجمالي</td>
+                                    <td><span class="ak-amount" t-out="data['section1']['total']['total_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="data['section1']['total']['share_fmt']"/></td>
+                                    <td t-out="data['section1']['total']['count']"/>
+                                    <td><span class="ak-amount" t-out="data['section1']['total']['avg_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="data['section1']['total']['discounts_fmt']"/></td>
+                                    <td t-out="data['section1']['total']['customers']"/>
+                                    <td t-out="data['section1']['total']['new']"/>
+                                    <td t-out="data['section1']['total']['old']"/>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <!-- ==================== القسم الأسبوعي 5: أعلى 10 فواتير ==================== -->
+                        <div class="ak-page-start"></div>
+                        <t t-if="not data['top_invoices']['rows']">
+                            <div class="ak-keep">
+                                <div class="ak-section-title"><span class="ak-section-num">٦</span> أعلى 10 فواتير في الشهر (قنوات نقاط البيع)</div>
+                                <p class="ak-empty">لا توجد فواتير مبيعات ضمن الشهر المحدد.</p>
+                            </div>
+                        </t>
+                        <div t-if="data['top_invoices']['rows']" class="ak-keep ak-section-block">
+                        <table class="ak-table">
+                            <caption class="ak-section-caption"><span class="ak-section-num">٦</span> أعلى 10 فواتير في الشهر (قنوات نقاط البيع)</caption>
+                            <thead>
+                                <tr>
+                                    <th style="width: 11%;">التاريخ</th>
+                                    <th style="width: 12%;">رقم الفاتورة</th>
+                                    <th style="width: 10%;">قناة البيع</th>
+                                    <th style="width: 13%;">العميل</th>
+                                    <th style="width: 11%;">رقم الهاتف</th>
+                                    <th style="width: 8%;">عميل جديد؟</th>
+                                    <th style="width: 11%;">تاريخ آخر فاتورة</th>
+                                    <th style="width: 10%;">الأيام منذ آخر فاتورة</th>
+                                    <th style="width: 14%;">الإجمالي (<t t-out="data['currency']"/>)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="data['top_invoices']['rows']" t-as="row">
+                                    <td><span class="ak-amount" t-out="row['date']"/></td>
+                                    <td><span class="ak-amount" t-out="row['number']"/></td>
+                                    <td t-out="row['pos']"/>
+                                    <td t-out="row['customer']"/>
+                                    <td><span class="ak-amount" t-out="row['phone']"/></td>
+                                    <td t-out="row['is_new']"/>
+                                    <td><span class="ak-amount" t-out="row['last_inv']"/></td>
+                                    <td t-out="row['days']"/>
+                                    <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                </tr>
+                                <tr class="ak-total-row">
+                                    <td class="ak-right" colspan="2">إجمالي الشهر</td>
+                                    <td colspan="6">إجمالي فواتير الشهر (جميع القنوات): <t t-out="data['top_invoices']['count']"/></td>
+                                    <td><span class="ak-amount" t-out="data['top_invoices']['total_fmt']"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <!-- ==================== القسم الأسبوعي 6: مرتجعات المبيعات ==================== -->
+                        <t t-if="not data['section3']['rows']">
+                            <div class="ak-keep">
+                                <div class="ak-section-title"><span class="ak-section-num">٧</span> فواتير مرتجعات المبيعات (جميع القنوات)</div>
+                                <p class="ak-empty">لا توجد مرتجعات مبيعات ضمن الشهر المحدد.</p>
+                            </div>
+                        </t>
+                        <div t-if="data['section3']['rows']" t-att-class="('ak-keep' if data['section3']['count'] &lt;= 10 else 'ak-page-start') + ' ak-section-block'">
+                        <table class="ak-table">
+                            <caption class="ak-section-caption"><span class="ak-section-num">٧</span> فواتير مرتجعات المبيعات (جميع القنوات)</caption>
+                            <thead>
+                                <tr>
+                                    <th style="width: 13%;">التاريخ</th>
+                                    <th style="width: 14%;">رقم الفاتورة</th>
+                                    <th style="width: 12%;">قناة البيع</th>
+                                    <th style="width: 17%;">العميل</th>
+                                    <th style="width: 13%;">رقم الهاتف</th>
+                                    <th style="width: 13%;">تاريخ آخر فاتورة</th>
+                                    <th style="width: 18%;">الإجمالي (<t t-out="data['currency']"/>)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="data['section3']['rows']" t-as="row">
+                                    <td><span class="ak-amount" t-out="row['date']"/></td>
+                                    <td><span class="ak-amount" t-out="row['number']"/></td>
+                                    <td t-out="row['pos']"/>
+                                    <td t-out="row['customer']"/>
+                                    <td><span class="ak-amount" t-out="row['phone']"/></td>
+                                    <td><span class="ak-amount" t-out="row['last_inv']"/></td>
+                                    <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                </tr>
+                                <tr class="ak-total-row">
+                                    <td class="ak-right" colspan="2">الإجمالي</td>
+                                    <td colspan="4">عدد المرتجعات: <t t-out="data['section3']['count']"/></td>
+                                    <td><span class="ak-amount" t-out="data['section3']['total_fmt']"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <!-- ==================== القسم الأسبوعي 7: أعلى المنتجات مبيعاً ==================== -->
+                        <t t-if="not data['top_products']['rows']">
+                            <div class="ak-keep">
+                                <div class="ak-section-title"><span class="ak-section-num">٨</span> أعلى 30 منتجاً مبيعاً خلال الشهر (جميع القنوات)</div>
+                                <p class="ak-empty">لا توجد مبيعات منتجات ضمن الشهر المحدد.</p>
+                            </div>
+                        </t>
+                        <div t-if="data['top_products']['rows']" class="ak-page-start ak-section-block">
+                        <table class="ak-table">
+                            <caption class="ak-section-caption"><span class="ak-section-num">٨</span> أعلى 30 منتجاً مبيعاً خلال الشهر (جميع القنوات)</caption>
+                            <thead>
+                                <tr>
+                                    <th style="width: 4%;">#</th>
+                                    <th style="width: 21%;">المنتج</th>
+                                    <th style="width: 10%;">الفئة</th>
+                                    <th style="width: 7%;">الكمية المباعة</th>
+                                    <th style="width: 9%;">متوسط سعر الوحدة</th>
+                                    <th style="width: 9%;">إجمالي الخصم (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 11%;">هذا الشهر (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 11%;">الشهر السابق (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 11%;">التغير</th>
+                                    <th style="width: 7%;">نسبة التغير</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="data['top_products']['rows']" t-as="row">
+                                    <td class="ak-rank" t-out="row['rank']"/>
+                                    <td class="ak-right" t-out="row['name']"/>
+                                    <td class="ak-right" t-out="row['category']"/>
+                                    <td><span class="ak-amount" t-out="row['qty_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['avg_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['discount_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['prev_fmt']"/></td>
+                                    <td><span t-att-class="row['cmp_class']"><span class="ak-amount" t-out="row['diff_fmt']"/></span></td>
+                                    <td><span t-att-class="row['cmp_class']"><span class="ak-amount" t-out="row['pct_fmt']"/></span></td>
+                                </tr>
+                                <tr class="ak-total-row">
+                                    <td class="ak-right" colspan="10">إجمالي المنتجات المباعة خلال الشهر: <t t-out="data['top_products']['total_count']"/> منتجاً</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <!-- ==================== القسم الأسبوعي 8: المبيعات حسب الفئة ==================== -->
+                        <t t-if="not data['category_summary']['rows']">
+                            <div class="ak-keep">
+                                <div class="ak-section-title"><span class="ak-section-num">٩</span> المبيعات حسب الفئة (جميع القنوات)</div>
+                                <p class="ak-empty">لا توجد مبيعات منتجات ضمن الشهر المحدد.</p>
+                            </div>
+                        </t>
+                        <div t-if="data['category_summary']['rows']" class="ak-page-start ak-section-block">
+                        <table class="ak-table">
+                            <caption class="ak-section-caption"><span class="ak-section-num">٩</span> المبيعات حسب الفئة (جميع القنوات)</caption>
+                            <thead>
+                                <tr>
+                                    <th style="width: 18%;">الفئة</th>
+                                    <th style="width: 8%;">الكمية المباعة</th>
+                                    <th style="width: 10%;">متوسط سعر الوحدة</th>
+                                    <th style="width: 10%;">إجمالي الخصم (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 12%;">هذا الشهر (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 9%;">النسبة من المبيعات</th>
+                                    <th style="width: 12%;">الشهر السابق (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 13%;">التغير</th>
+                                    <th style="width: 8%;">نسبة التغير</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="data['category_summary']['rows']" t-as="row">
+                                    <td class="ak-right" t-out="row['name']"/>
+                                    <td><span class="ak-amount" t-out="row['qty_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['avg_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['discount_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['share_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="row['prev_fmt']"/></td>
+                                    <td><span t-att-class="row['cmp_class']"><span class="ak-amount" t-out="row['diff_fmt']"/></span></td>
+                                    <td><span t-att-class="row['cmp_class']"><span class="ak-amount" t-out="row['pct_fmt']"/></span></td>
+                                </tr>
+                                <tr class="ak-total-row">
+                                    <td class="ak-right">الإجمالي</td>
+                                    <td><span class="ak-amount" t-out="data['category_summary']['total_qty_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="data['category_summary']['total_avg_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="data['category_summary']['total_discount_fmt']"/></td>
+                                    <td><span class="ak-amount" t-out="data['category_summary']['total_fmt']"/></td>
+                                    <td><span class="ak-amount">%100.0</span></td>
+                                    <td colspan="3"> </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <!-- ==================== القسم 10: تفاصيل المنتجات المباعة حسب الفئة ==================== -->
+                        <t t-if="not data['products_detail']['categories']">
+                            <div class="ak-keep">
+                                <div class="ak-section-title"><span class="ak-section-num">١٠</span> تفاصيل المنتجات المباعة حسب الفئة (جميع القنوات)</div>
+                                <p class="ak-empty">لا توجد مبيعات منتجات ضمن الشهر المحدد.</p>
+                            </div>
+                        </t>
+                        <div t-if="data['products_detail']['categories']" class="ak-page-start ak-section-block">
+                        <table class="ak-table">
+                            <caption class="ak-section-caption"><span class="ak-section-num">١٠</span> تفاصيل المنتجات المباعة حسب الفئة (جميع القنوات)</caption>
+                            <thead>
+                                <tr>
+                                    <th style="width: 24%;">المنتج</th>
+                                    <th style="width: 8%;">الكمية المباعة</th>
+                                    <th style="width: 10%;">متوسط سعر الوحدة</th>
+                                    <th style="width: 10%;">إجمالي الخصم (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 12%;">هذا الشهر (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 12%;">الشهر السابق (<t t-out="data['currency']"/>)</th>
+                                    <th style="width: 15%;">التغير</th>
+                                    <th style="width: 9%;">نسبة التغير</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="data['products_detail']['categories']" t-as="cat">
+                                    <tr class="ak-cat-row">
+                                        <td class="ak-right"><t t-out="cat['name']"/> <span class="ak-amount">(<t t-out="cat['product_count']"/> منتج)</span></td>
+                                        <td class="ak-num"><span class="ak-amount" t-out="cat['qty_fmt']"/></td>
+                                        <td class="ak-num">—</td>
+                                        <td class="ak-num">—</td>
+                                        <td class="ak-num"><span class="ak-amount" t-out="cat['total_fmt']"/></td>
+                                        <td class="ak-num"><span class="ak-amount" t-out="cat['prev_fmt']"/></td>
+                                        <td class="ak-num"><span class="ak-amount" t-out="cat['diff_fmt']"/></td>
+                                        <td class="ak-num"><span class="ak-amount" t-out="cat['pct_fmt']"/></td>
+                                    </tr>
+                                    <tr t-foreach="cat['rows']" t-as="row">
+                                        <td class="ak-right" t-out="row['name']"/>
+                                        <td><span class="ak-amount" t-out="row['qty_fmt']"/></td>
+                                        <td><span class="ak-amount" t-out="row['avg_fmt']"/></td>
+                                        <td><span class="ak-amount" t-out="row['discount_fmt']"/></td>
+                                        <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                        <td><span class="ak-amount" t-out="row['prev_fmt']"/></td>
+                                        <td><span t-att-class="row['cmp_class']"><span class="ak-amount" t-out="row['diff_fmt']"/></span></td>
+                                        <td><span t-att-class="row['cmp_class']"><span class="ak-amount" t-out="row['pct_fmt']"/></span></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <!-- ==================== القسم 11: مقارنة أداء قنوات البيع - الفئات والمنتجات ==================== -->
+                        <div class="ak-page-start ak-section-block">
+                        <div class="ak-section-title"><span class="ak-section-num">١١</span> مقارنة أداء قنوات البيع بالشهر السابق — الفئات والمنتجات (<t t-out="data['currency']"/>)</div>
+                        <t t-foreach="data['channel_product_comparison']['channels']" t-as="chp">
+                            <div class="ak-pos-band"><t t-out="chp['name']"/></div>
+                            <p t-if="not chp['has_data']" class="ak-empty">لا توجد مبيعات في هذه القناة ضمن الشهر المحدد.</p>
+                            <p t-if="chp['has_data'] and chp['prev_missing']" class="ak-empty">لمقارنة هذه القناة بالشهر السابق: اختر فواتير المتجر الإلكتروني للشهر السابق في معالج التقرير.</p>
+                            <t t-if="chp['has_data']">
+                                <div class="ak-exec-caption">فئات المنتجات</div>
+                                <table class="ak-table">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" style="width: 19%;">الفئة</th>
+                                            <th class="ak-group" colspan="3">الكمية المباعة</th>
+                                            <th class="ak-group" colspan="3">إجمالي المبيعات (<t t-out="data['currency']"/>)</th>
+                                            <th class="ak-group" colspan="3">إجمالي الخصم (<t t-out="data['currency']"/>)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 9%;">هذا الشهر</th>
+                                            <th style="width: 9%;">الشهر السابق</th>
+                                            <th style="width: 9%;">نسبة التغير</th>
+                                            <th style="width: 9%;">هذا الشهر</th>
+                                            <th style="width: 9%;">الشهر السابق</th>
+                                            <th style="width: 9%;">نسبة التغير</th>
+                                            <th style="width: 9%;">هذا الشهر</th>
+                                            <th style="width: 9%;">الشهر السابق</th>
+                                            <th style="width: 9%;">نسبة التغير</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="chp['categories']" t-as="row">
+                                            <td class="ak-right" t-out="row['name']"/>
+                                            <td><span class="ak-amount" t-out="row['qty_cur']"/></td>
+                                            <td><span class="ak-amount" t-out="row['qty_prev']"/></td>
+                                            <td><span t-att-class="row['qty_cls']"><span class="ak-amount" t-out="row['qty_pct']"/></span></td>
+                                            <td><span class="ak-amount" t-out="row['total_cur']"/></td>
+                                            <td><span class="ak-amount" t-out="row['total_prev']"/></td>
+                                            <td><span t-att-class="row['total_cls']"><span class="ak-amount" t-out="row['total_pct']"/></span></td>
+                                            <td><span class="ak-amount" t-out="row['discount_cur']"/></td>
+                                            <td><span class="ak-amount" t-out="row['discount_prev']"/></td>
+                                            <td><span t-att-class="row['discount_cls']"><span class="ak-amount" t-out="row['discount_pct']"/></span></td>
+                                        </tr>
+                                        <tr class="ak-total-row">
+                                            <td class="ak-right" t-out="chp['categories_total']['name']"/>
+                                            <td><span class="ak-amount" t-out="chp['categories_total']['qty_cur']"/></td>
+                                            <td><span class="ak-amount" t-out="chp['categories_total']['qty_prev']"/></td>
+                                            <td><span t-att-class="chp['categories_total']['qty_cls']"><span class="ak-amount" t-out="chp['categories_total']['qty_pct']"/></span></td>
+                                            <td><span class="ak-amount" t-out="chp['categories_total']['total_cur']"/></td>
+                                            <td><span class="ak-amount" t-out="chp['categories_total']['total_prev']"/></td>
+                                            <td><span t-att-class="chp['categories_total']['total_cls']"><span class="ak-amount" t-out="chp['categories_total']['total_pct']"/></span></td>
+                                            <td><span class="ak-amount" t-out="chp['categories_total']['discount_cur']"/></td>
+                                            <td><span class="ak-amount" t-out="chp['categories_total']['discount_prev']"/></td>
+                                            <td><span t-att-class="chp['categories_total']['discount_cls']"><span class="ak-amount" t-out="chp['categories_total']['discount_pct']"/></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="ak-exec-caption">أعلى <t t-out="data['channel_product_comparison']['top_limit']"/> منتجاً مبيعاً في القناة — مقسمة حسب فئات المنتجات</div>
+                                <table class="ak-table">
+                                    <thead>
+                                        <tr>
+                                            <th rowspan="2" style="width: 19%;">المنتج</th>
+                                            <th class="ak-group" colspan="3">الكمية المباعة</th>
+                                            <th class="ak-group" colspan="3">إجمالي المبيعات (<t t-out="data['currency']"/>)</th>
+                                            <th class="ak-group" colspan="3">إجمالي الخصم (<t t-out="data['currency']"/>)</th>
+                                        </tr>
+                                        <tr>
+                                            <th style="width: 9%;">هذا الشهر</th>
+                                            <th style="width: 9%;">الشهر السابق</th>
+                                            <th style="width: 9%;">نسبة التغير</th>
+                                            <th style="width: 9%;">هذا الشهر</th>
+                                            <th style="width: 9%;">الشهر السابق</th>
+                                            <th style="width: 9%;">نسبة التغير</th>
+                                            <th style="width: 9%;">هذا الشهر</th>
+                                            <th style="width: 9%;">الشهر السابق</th>
+                                            <th style="width: 9%;">نسبة التغير</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="chp['product_groups']" t-as="grp">
+                                            <tr class="ak-cat-row">
+                                                <td class="ak-right" colspan="10"><t t-out="grp['name']"/> <span class="ak-amount">(<t t-out="grp['count']"/> منتج)</span></td>
+                                            </tr>
+                                            <tr t-foreach="grp['rows']" t-as="row">
+                                                <td class="ak-right" t-out="row['name']"/>
+                                                <td><span class="ak-amount" t-out="row['qty_cur']"/></td>
+                                                <td><span class="ak-amount" t-out="row['qty_prev']"/></td>
+                                                <td><span t-att-class="row['qty_cls']"><span class="ak-amount" t-out="row['qty_pct']"/></span></td>
+                                                <td><span class="ak-amount" t-out="row['total_cur']"/></td>
+                                                <td><span class="ak-amount" t-out="row['total_prev']"/></td>
+                                                <td><span t-att-class="row['total_cls']"><span class="ak-amount" t-out="row['total_pct']"/></span></td>
+                                                <td><span class="ak-amount" t-out="row['discount_cur']"/></td>
+                                                <td><span class="ak-amount" t-out="row['discount_prev']"/></td>
+                                                <td><span t-att-class="row['discount_cls']"><span class="ak-amount" t-out="row['discount_pct']"/></span></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                        </t>
+                        </div>
+
+                        <!-- ==================== القسم 12: عملاء VIP لكل قناة بيع ==================== -->
+                        <t t-if="not data['vip']['has_rows']">
+                            <div class="ak-keep">
+                                <div class="ak-section-title"><span class="ak-section-num">١٢</span> عملاء VIP — الأعلى إنفاقاً خلال الشهر (أكثر من <span class="ak-amount" t-out="data['vip']['threshold_fmt']"/> <t t-out="data['currency']"/>)</div>
+                                <p class="ak-empty">لا يوجد عملاء تجاوز إنفاقهم الحد ضمن الشهر المحدد.</p>
+                            </div>
+                        </t>
+                        <div t-if="data['vip']['has_rows']" class="ak-page-start ak-section-block">
+                        <div class="ak-section-title"><span class="ak-section-num">١٢</span> عملاء VIP — الأعلى إنفاقاً خلال الشهر لكل قناة بيع (أكثر من <span class="ak-amount" t-out="data['vip']['threshold_fmt']"/> <t t-out="data['currency']"/>)</div>
+                        <t t-foreach="data['vip']['channels']" t-as="vch">
+                            <div class="ak-keep">
+                                <div class="ak-pos-band"><t t-out="vch['name']"/> — <t t-out="len(vch['rows'])"/> عميل VIP</div>
+                                <p t-if="not vch['rows']" class="ak-empty">لا يوجد عملاء تجاوزوا الحد في هذه القناة.</p>
+                                <table t-if="vch['rows']" class="ak-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 4%;">#</th>
+                                            <th style="width: 20%;">العميل</th>
+                                            <th style="width: 12%;">رقم الهاتف</th>
+                                            <th style="width: 7%;">نوع العميل</th>
+                                            <th style="width: 7%;">عدد الفواتير</th>
+                                            <th style="width: 11%;">متوسط الفاتورة (<t t-out="data['currency']"/>)</th>
+                                            <th style="width: 12%;">هذا الشهر (<t t-out="data['currency']"/>)</th>
+                                            <th style="width: 11%;">الشهر السابق (<t t-out="data['currency']"/>)</th>
+                                            <th style="width: 10%;">التغير</th>
+                                            <th style="width: 6%;">نسبة التغير</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="vch['rows']" t-as="row">
+                                            <td class="ak-rank" t-out="row['rank']"/>
+                                            <td class="ak-right" t-out="row['name']"/>
+                                            <td><span class="ak-amount" t-out="row['phone']"/></td>
+                                            <td t-att-class="'ak-badge-new' if row['ptype'] == 'جديد' else 'ak-badge-old'" t-out="row['ptype']"/>
+                                            <td t-out="row['count']"/>
+                                            <td><span class="ak-amount" t-out="row['avg_fmt']"/></td>
+                                            <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                            <td><span class="ak-amount" t-out="row['prev_fmt']"/></td>
+                                            <td><span t-att-class="row['cmp_class']"><span class="ak-amount" t-out="row['diff_fmt']"/></span></td>
+                                            <td><span t-att-class="row['cmp_class']"><span class="ak-amount" t-out="row['pct_fmt']"/></span></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <p t-if="vch_last" class="ak-empty">إجمالي عملاء الشهر المسجلين (قنوات نقاط البيع): <t t-out="data['vip']['total_customers']"/> عميلاً</p>
+                            </div>
+                        </t>
+                        </div>
+
+                        <div class="ak-page-start"></div>
+                        <t t-if="not data['section5']['configs']">
+                            <div class="ak-keep">
+                                <div class="ak-section-title"><span class="ak-section-num">١٣</span> مبيعات الموظفين حسب الفرع</div>
+                                <p class="ak-empty">لا توجد بيانات موظفين ضمن الشهر المحدد.</p>
+                            </div>
+                        </t>
+                        <t t-foreach="data['section5']['configs']" t-as="cfg">
+                            <div class="ak-keep">
+                            <div t-if="cfg_first" class="ak-section-title"><span class="ak-section-num">١٣</span> مبيعات الموظفين حسب الفرع</div>
+                            <div class="ak-pos-band" t-out="cfg['name']"/>
+                            <table class="ak-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%;">الموظف</th>
+                                        <th style="width: 14%;">صافي المبيعات (<t t-out="data['currency']"/>)</th>
+                                        <th style="width: 10%;">عدد الفواتير</th>
+                                        <th style="width: 12%;">متوسط الفاتورة</th>
+                                        <th style="width: 12%;">الخصومات (<t t-out="data['currency']"/>)</th>
+                                        <th style="width: 12%;">عدد العملاء</th>
+                                        <th style="width: 10%;">عملاء جدد</th>
+                                        <th style="width: 10%;">عملاء قدامى</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="cfg['rows']" t-as="row">
+                                        <td class="ak-right" t-out="row['name']"/>
+                                        <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                        <td t-out="row['count']"/>
+                                        <td><span class="ak-amount" t-out="row['avg_fmt']"/></td>
+                                        <td><span class="ak-amount" t-out="row['discounts_fmt']"/></td>
+                                        <td t-out="row['customers']"/>
+                                        <td class="ak-badge-new" t-out="row['new']"/>
+                                        <td class="ak-badge-old" t-out="row['old']"/>
+                                    </tr>
+                                    <tr class="ak-total-row">
+                                        <td class="ak-right">الإجمالي</td>
+                                        <td><span class="ak-amount" t-out="cfg['subtotal']['total_fmt']"/></td>
+                                        <td t-out="cfg['subtotal']['count']"/>
+                                        <td><span class="ak-amount" t-out="cfg['subtotal']['avg_fmt']"/></td>
+                                        <td><span class="ak-amount" t-out="cfg['subtotal']['discounts_fmt']"/></td>
+                                        <td t-out="cfg['subtotal']['customers']"/>
+                                        <td t-out="cfg['subtotal']['new']"/>
+                                        <td t-out="cfg['subtotal']['old']"/>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </t>
+
+                        <!-- ==================== القسم الأسبوعي 10: تحليل الخصومات ==================== -->
+                        <t t-if="not data['section6']['configs']">
+                            <div class="ak-keep">
+                                <div class="ak-section-title"><span class="ak-section-num">١٤</span> تحليل الخصومات حسب الفرع</div>
+                                <p class="ak-empty">لا توجد خصومات ضمن الشهر المحدد.</p>
+                            </div>
+                        </t>
+                        <t t-foreach="data['section6']['configs']" t-as="cfg">
+                            <div class="ak-keep">
+                            <div t-if="cfg_first" class="ak-section-title"><span class="ak-section-num">١٤</span> تحليل الخصومات حسب الفرع</div>
+                            <div class="ak-pos-band" t-out="cfg['name']"/>
+                            <table class="ak-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40%;">الخصم</th>
+                                        <th style="width: 22%;">إجمالي الخصم (<t t-out="data['currency']"/>)</th>
+                                        <th style="width: 18%;">عدد الفواتير</th>
+                                        <th style="width: 20%;">متوسط خصم الفاتورة (<t t-out="data['currency']"/>)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="cfg['rows']" t-as="row">
+                                        <td class="ak-right" t-out="row['name']"/>
+                                        <td><span class="ak-amount" t-out="row['total_fmt']"/></td>
+                                        <td t-out="row['count']"/>
+                                        <td><span class="ak-amount" t-out="row['avg_fmt']"/></td>
+                                    </tr>
+                                    <tr class="ak-subtotal-row">
+                                        <td class="ak-right">إجمالي خصومات <t t-out="cfg['name']"/></td>
+                                        <td><span class="ak-amount" t-out="cfg['subtotal_fmt']"/></td>
+                                        <td t-out="cfg['subtotal_count']"/>
+                                        <td><span class="ak-amount" t-out="cfg['subtotal_avg_fmt']"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </t>
+                        <div t-if="data['section6']['configs']" class="ak-keep">
+                        <table class="ak-table" style="margin-top: 6px;">
+                            <tbody>
+                                <tr class="ak-total-row">
+                                    <td class="ak-right" style="width: 40%;">الإجمالي العام للخصومات</td>
+                                    <td style="width: 22%;"><span class="ak-amount" t-out="data['section6']['total_fmt']"/></td>
+                                    <td style="width: 18%;" t-out="data['section6']['total_count']"/>
+                                    <td style="width: 20%;"><span class="ak-amount" t-out="data['section6']['total_avg_fmt']"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
