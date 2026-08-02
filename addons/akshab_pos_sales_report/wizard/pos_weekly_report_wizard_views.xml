@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_akshab_pos_weekly_report_wizard_form" model="ir.ui.view">
+        <field name="name">akshab.pos.weekly.report.wizard.form</field>
+        <field name="model">akshab.pos.weekly.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="تقرير المبيعات الأسبوعي">
+                <group>
+                    <group string="الأسبوع">
+                        <field name="week_start"/>
+                        <field name="date_from" readonly="1"/>
+                        <field name="date_to" readonly="1"/>
+                    </group>
+                    <group string="الفروع">
+                        <field name="config_ids" widget="many2many_tags"
+                               options="{'no_create': True}" nolabel="1" colspan="2"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print_report" string="طباعة التقرير"
+                            type="object" class="btn-primary" data-hotkey="q"/>
+                    <button string="إلغاء" class="btn-secondary"
+                            special="cancel" data-hotkey="x"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_akshab_pos_weekly_report_wizard" model="ir.actions.act_window">
+        <field name="name">تقرير المبيعات الأسبوعي</field>
+        <field name="res_model">akshab.pos.weekly.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_akshab_pos_weekly_report"
+              name="تقرير المبيعات الأسبوعي"
+              parent="point_of_sale.menu_point_rep"
+              action="action_akshab_pos_weekly_report_wizard"
+              groups="point_of_sale.group_pos_manager"
+              sequence="6"/>
+</odoo>
