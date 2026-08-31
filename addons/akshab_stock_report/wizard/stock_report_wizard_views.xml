@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_akshab_stock_report_wizard_form" model="ir.ui.view">
+        <field name="name">akshab.stock.report.wizard.form</field>
+        <field name="model">akshab.stock.report.wizard</field>
+        <field name="arch" type="xml">
+            <form string="تقرير المخزون">
+                <div class="alert alert-info mb-3" role="status" style="border-inline-start: 4px solid #1F3D2F; background:#F6F3EC; color:#1F3D2F;">
+                    <strong>تقرير المخزون التنفيذي</strong> — أعمار المخزون، الأصناف الراكدة والنشطة، وتوصيات التصفية.
+                    اختر النطاق والمعايير ثم اطبع PDF أو صدّر Excel. جميع المعايير لها قيم افتراضية مناسبة.
+                </div>
+                <group>
+                    <group string="النطاق">
+                        <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="date_to"/>
+                        <field name="warehouse_ids" widget="many2many_tags"
+                               options="{'no_create': True}" placeholder="جميع المستودعات"/>
+                        <field name="location_ids" widget="many2many_tags"
+                               options="{'no_create': True}" placeholder="جميع المواقع الداخلية"/>
+                        <field name="categ_ids" widget="many2many_tags"
+                               options="{'no_create': True}" placeholder="جميع الفئات"/>
+                        <field name="product_ids" widget="many2many_tags"
+                               options="{'no_create': True}" placeholder="جميع الأصناف"/>
+                    </group>
+                    <group string="معايير التحليل">
+                        <field name="sales_days"/>
+                        <field name="stagnant_days"/>
+                        <field name="new_days"/>
+                        <field name="slow_cover_days"/>
+                        <field name="reorder_cover_days"/>
+                        <field name="liquidation_discount"/>
+                        <field name="cost_basis"/>
+                        <field name="aging_scope" widget="radio"/>
+                    </group>
+                </group>
+                <group>
+                    <group string="الفئات العمرية (حد أعلى بالأيام)">
+                        <field name="bucket_1"/>
+                        <field name="bucket_2"/>
+                        <field name="bucket_3"/>
+                        <field name="bucket_4"/>
+                        <field name="bucket_5"/>
+                    </group>
+                    <group string="خيارات العرض">
+                        <field name="max_lines"/>
+                        <field name="show_active"/>
+                        <field name="show_out_of_stock"/>
+                        <field name="show_category_aging"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_print_pdf" string="طباعة PDF" type="object" class="btn-primary" icon="fa-file-pdf-o"/>
+                    <button name="action_export_xlsx" string="تصدير Excel" type="object" class="btn-primary" icon="fa-file-excel-o"/>
+                    <button string="إلغاء" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_akshab_stock_report_wizard" model="ir.actions.act_window">
+        <field name="name">تقرير المخزون</field>
+        <field name="res_model">akshab.stock.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_akshab_stock_report_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
