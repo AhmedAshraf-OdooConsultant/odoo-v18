@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="paperformat_akshab_stock_report" model="report.paperformat">
+            <field name="name">Akshab Inventory Report – A4 Landscape</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">12</field>
+            <field name="margin_left">8</field>
+            <field name="margin_right">8</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+            <field name="disable_shrinking" eval="True"/>
+        </record>
+
+        <record id="action_report_akshab_stock_pdf" model="ir.actions.report">
+            <field name="name">تقرير المخزون</field>
+            <field name="model">akshab.stock.report.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">akshab_stock_report.report_akshab_stock_document</field>
+            <field name="report_file">akshab_stock_report.report_akshab_stock_document</field>
+            <field name="print_report_name">'تقرير المخزون %s' % (object.date_to and object.date_to.strftime('%Y%m%d') or '')</field>
+            <field name="paperformat_id" ref="paperformat_akshab_stock_report"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="action_report_akshab_stock_aging_pdf" model="ir.actions.report">
+            <field name="name">تقرير أعمار المخزون</field>
+            <field name="model">akshab.stock.aging.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">akshab_stock_report.report_aging_doc</field>
+            <field name="report_file">akshab_stock_report.report_aging_doc</field>
+            <field name="print_report_name">'تقرير أعمار المخزون %s' % (object.date_to and object.date_to.strftime('%Y%m%d') or '')</field>
+            <field name="paperformat_id" ref="paperformat_akshab_stock_report"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="action_report_akshab_stock_turnover_pdf" model="ir.actions.report">
+            <field name="name">تقرير معدل دوران المخزون</field>
+            <field name="model">akshab.stock.turnover.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">akshab_stock_report.report_turnover_doc</field>
+            <field name="report_file">akshab_stock_report.report_turnover_doc</field>
+            <field name="print_report_name">'تقرير معدل دوران المخزون %s' % (object.date_to and object.date_to.strftime('%Y%m%d') or '')</field>
+            <field name="paperformat_id" ref="paperformat_akshab_stock_report"/>
+            <field name="binding_type">report</field>
+        </record>
+
+        <record id="action_report_akshab_stock_status_pdf" model="ir.actions.report">
+            <field name="name">تقرير حالة الأصناف</field>
+            <field name="model">akshab.stock.status.wizard</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">akshab_stock_report.report_status_doc</field>
+            <field name="report_file">akshab_stock_report.report_status_doc</field>
+            <field name="print_report_name">'تقرير حالة الأصناف %s' % (object.date_to and object.date_to.strftime('%Y%m%d') or '')</field>
+            <field name="paperformat_id" ref="paperformat_akshab_stock_report"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>
