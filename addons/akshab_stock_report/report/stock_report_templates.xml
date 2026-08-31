@@ -1,0 +1,981 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================ -->
+    <!-- Styles (Akshab identity: dark green / gold, RTL, Tajawal)     -->
+    <!-- ============================================================ -->
+    <template id="report_akshab_stock_style">
+        <style type="text/css">
+            @font-face { font-family: 'Tajawal'; font-style: normal; font-weight: 400;
+                src: url('/akshab_stock_report/static/fonts/Tajawal-Regular.ttf') format('truetype'); }
+            @font-face { font-family: 'Tajawal'; font-style: normal; font-weight: 500;
+                src: url('/akshab_stock_report/static/fonts/Tajawal-Medium.ttf') format('truetype'); }
+            @font-face { font-family: 'Tajawal'; font-style: normal; font-weight: 700;
+                src: url('/akshab_stock_report/static/fonts/Tajawal-Bold.ttf') format('truetype'); }
+            @font-face { font-family: 'Tajawal'; font-style: normal; font-weight: 800;
+                src: url('/akshab_stock_report/static/fonts/Tajawal-ExtraBold.ttf') format('truetype'); }
+
+            .aks { direction: rtl; text-align: right; font-family: 'Tajawal', 'DejaVu Sans', Arial, sans-serif;
+                   color: #1A1A1A; font-size: 12.5px; line-height: 1.5; width: 100%; }
+            .aks * { box-sizing: border-box; }
+            /* wkhtmltopdf paints bootstrap's zero-width "solid" table borders as hairlines */
+            .aks table, .aks thead, .aks tbody, .aks tfoot, .aks tr, .aks td, .aks th { border: 0 none transparent; }
+            .aks table { width: 100%; border-collapse: collapse; }
+            .aks td, .aks th { padding: 5px 6px; vertical-align: middle; }
+            .aks .num { text-align: center; white-space: nowrap; }
+            .aks .ltr { direction: ltr; unicode-bidi: embed; }
+            .aks .txt { text-align: right; }
+            .aks .c { text-align: center; }
+            .aks .b { font-weight: 700; }
+            .aks .green { color: #1F3D2F; }
+            .aks .gold { color: #A98A3E; }
+            .aks .red { color: #A94442; }
+            .aks .muted { color: #7A7A7A; }
+            .aks .small { font-size: 10.5px; }
+
+            /* ---- header ---- */
+            .aks-head { margin-bottom: 8px; border: 0 !important; }
+            .aks-head td { padding: 0; border: 0 !important; background: transparent; }
+            .aks-title { font-size: 28px; font-weight: 800; color: #1F3D2F; line-height: 1.25; }
+            .aks-subtitle { font-size: 12px; font-weight: 700; color: #B8973F; letter-spacing: 3px; margin-top: 2px; }
+            .aks-logo { text-align: left; }
+            .aks-logo img { max-height: 60px; max-width: 190px; }
+
+            /* ---- KPI tiles ---- */
+            .aks-kpis { border-collapse: separate; border-spacing: 5px 0; margin: 4px 0 10px; }
+            .aks td.aks-kpi { background: #F6F3EC; border-top: 3px solid #B99A5B; text-align: center; padding: 8px 4px 6px; width: 14.28%; }
+            .aks-kpi .v { font-size: 19px; font-weight: 700; color: #1F3D2F; line-height: 1.25; white-space: nowrap; }
+            .aks-kpi .l { font-size: 11.5px; color: #6F6F6F; margin-top: 3px; }
+            .aks-kpi .s { font-size: 11px; color: #A98A3E; font-weight: 700; }
+
+            /* ---- info table ---- */
+            .aks-info { border: 1px solid #E5E0D3; margin-bottom: 10px; }
+            .aks .aks-info td { border: 1px solid #E5E0D3; padding: 6px 8px; }
+            .aks-info td.lbl { background: #EDE6D6; color: #1F3D2F; font-weight: 700; width: 13%; }
+            .aks-info td.val { width: 37%; }
+
+            /* ---- section bar ---- */
+            .aks-sec { margin: 12px 0 6px; page-break-inside: avoid; page-break-after: avoid; }
+            .aks .aks-sec td { background: #1F3D2F; color: #fff; padding: 6px 10px; }
+            .aks .aks-sec td.idx { width: 36px; text-align: center; background: #2B5240; color: #D9B96B; font-weight: 700;
+                              font-size: 16px; border-right: 4px solid #B99A5B; padding: 6px 4px; }
+            .aks-sec td.ttl { font-size: 16px; font-weight: 700; }
+            .aks-sec td.hint { font-size: 11px; color: #CFC7B0; text-align: left; font-weight: 400; }
+
+            /* ---- tables ---- */
+            .aks-tbl { margin-bottom: 6px; }
+            .aks-tbl thead { display: table-header-group; }
+            .aks-tbl thead th { background: #1F3D2F; color: #fff; font-weight: 700; font-size: 12px; text-align: center;
+                                padding: 7px 6px; border-left: 1px solid #2B5240; }
+            .aks-tbl thead th.txt { text-align: right; }
+            .aks-tbl tbody td { border-bottom: 1px solid #ECE7DB; border-left: 1px solid #F1EDE4; font-size: 12px; }
+            .aks-tbl tbody tr.z td { background: #F7F4EE; }
+            .aks-tbl tr { page-break-inside: avoid; }
+            .aks-tbl tr.total td { background: #EFE9DC; border-top: 2px solid #C9B27C; font-weight: 700; color: #1F3D2F; }
+            .aks-tbl tr.group td { background: #1F3D2F; color: #fff; font-weight: 700; }
+            .aks-tbl tr.sub td { background: #C4A46A; color: #1F3D2F; font-weight: 700; }
+            .aks-tbl tr.sub.aks-grp td { background: #EFE3CB; border-top: 2px solid #C4A46A; border-bottom: 1px solid #D8C79E; padding: 6px 10px; }
+            .aks-tbl .prod { font-weight: 500; color: #1A1A1A; }
+            .aks-tbl .prod .code { direction: ltr; unicode-bidi: embed; font-weight: 700; color: #A98A3E; font-size: 11px; }
+            .aks-tbl .uom { font-size: 10px; color: #7A7A7A; margin-right: 2px; }
+            .aks-tbl .sub-line { font-size: 10px; color: #7A7A7A; margin-top: 1px; }
+            /* group (category) summary row: name + labelled chips, each figure isolated LTR */
+            .aks-grp .gname { font-size: 13px; font-weight: 800; color: #1F3D2F; }
+            .aks-grp .chip { display: inline-block; margin-right: 14px; white-space: nowrap; }
+            .aks-grp .cl { color: #4A5B52; font-weight: 400; }
+            .aks-grp .cv { direction: ltr; unicode-bidi: embed; font-weight: 700; color: #1F3D2F; }
+            .aks-grp .cv.red { color: #8E2F2F; }
+
+            /* ---- bars and badges ---- */
+            table.aks-bar { width: 100%; border-collapse: collapse; height: 9px; }
+            .aks table.aks-bar td { padding: 0; height: 9px; background: #E9E3D4; border: 0 none transparent; }
+            table.aks-bar td.fill { background: #1F3D2F; }
+            table.aks-bar.gold td.fill { background: #B99A5B; }
+            table.aks-bar.red td.fill { background: #A94442; }
+            table.aks-bar.amber td.fill { background: #C08A2E; }
+            table.aks-bar.blue td.fill { background: #4A6FA5; }
+            .aks-badge { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11px; font-weight: 700;
+                         color: #fff; white-space: nowrap; }
+            .b-active { background: #2E7D4F; } .b-slow { background: #C08A2E; } .b-stagnant { background: #A94442; }
+            .b-new { background: #4A6FA5; } .b-out { background: #6C757D; }
+            .b-liquidate { background: #8E2F2F; } .b-discount_high { background: #A94442; } .b-discount { background: #C08A2E; }
+            .b-stop_buy { background: #B8862B; } .b-transfer { background: #4A6FA5; } .b-reorder { background: #2E7D4F; }
+            .b-reorder_urgent { background: #1F3D2F; } .b-watch { background: #6C757D; } .b-keep { background: #7B8F84; }
+
+            .aks-note { font-size: 11px; color: #6F6F6F; margin: 2px 0 6px; }
+            .aks-legend { font-size: 11px; color: #555; margin: 0 0 6px; }
+            .aks-insights { margin: 0; padding: 0 18px 0 0; }
+            .aks-insights li { margin-bottom: 5px; font-size: 12.5px; color: #222; }
+            .aks-box { border: 1px solid #C9B27C; padding: 8px 10px; background: #FBF9F4; margin-top: 4px; page-break-inside: avoid; }
+            .aks-box .line { border-bottom: 1px dotted #B9B2A0; height: 20px; }
+            .aks .aks-method td { font-size: 11px; color: #555; padding: 3px 6px; vertical-align: top; }
+            .aks-method td.k { font-weight: 700; color: #1F3D2F; width: 16%; }
+            .aks-health { display: inline-block; padding: 1px 8px; border-radius: 3px; color: #fff; font-weight: 700; }
+            .pb { page-break-before: always; }
+            /* ---- dense tables (standalone reports) ---- */
+            .aks-tbl.aks-dense thead th { font-size: 11px; padding: 5px 4px; }
+            .aks-tbl.aks-dense tbody td { font-size: 11px; padding: 4px 4px; }
+            .aks-tbl.aks-dense thead th.old { background: #5A2F2F; }
+            .aks-tbl.aks-dense tbody td.old { background: #FBF1F1; }
+            .aks-tbl.aks-dense tbody tr.z td.old { background: #F6E9E9; }
+            .aks-tbl.aks-dense tr.total td { font-size: 11px; }
+        </style>
+    </template>
+
+    <!-- Section title bar -->
+    <template id="report_akshab_stock_section">
+        <table class="aks-sec">
+            <tr>
+                <td class="idx"><t t-esc="ar(sec)"/></td>
+                <td class="ttl"><t t-esc="title"/></td>
+                <td class="hint" t-if="hint"><t t-esc="hint"/></td>
+            </tr>
+        </table>
+    </template>
+
+    <!-- Horizontal bar (table based so it renders right-to-left in wkhtmltopdf) -->
+    <template id="report_akshab_stock_bar">
+        <table t-attf-class="aks-bar {{ bar_class or '' }}">
+            <tr>
+                <td class="fill" t-attf-style="width: {{ '%.1f' % max(1.0, min(100.0, bar or 0.0)) }}%;"/>
+                <td t-if="(bar or 0.0) &lt; 99.5"/>
+            </tr>
+        </table>
+    </template>
+
+    <!-- Product name cell: [internal reference] name, then the warehouse distribution -->
+    <template id="report_akshab_stock_product_cell">
+        <div class="prod" t-att-dir="'ltr' if r['name_ltr'] else 'rtl'" style="text-align:right;"><span class="code" t-if="r['code']">[<t t-esc="r['code']"/>]</span><t t-if="r['code']"> </t><t t-esc="r['name']"/></div>
+        <div class="sub-line" t-if="r['wh_text']"><t t-esc="r['wh_text']"/></div>
+    </template>
+
+    <!-- Group (category) summary row inside a product table: the category name followed by
+         labelled figures, each number isolated LTR so Arabic + digits never mix.
+         Expects: gname, gname_ltr, chips = [(label, value, red)] -->
+    <template id="report_akshab_group_row">
+        <tr class="sub aks-grp">
+            <td class="txt" t-att-colspan="cols">
+                <span t-att-class="'gname ltr' if gname_ltr else 'gname'"><t t-esc="gname"/></span>
+                <span class="chip" t-foreach="chips" t-as="ch">
+                    <span class="cl"><t t-esc="ch[0]"/>:</span>
+                    <span t-att-class="'cv red' if ch[2] else 'cv'"><t t-esc="ch[1]"/></span>
+                </span>
+            </td>
+        </tr>
+    </template>
+
+    <!-- Standard product columns: quantity (with UoM), unit cost, cost value, sale price, sale
+         value.  "std" = five columns; "std_c" = compact three columns (cost/value and
+         price/sale value stacked).  Cells expect r; totals expect tq, tv, tsv. -->
+    <template id="report_akshab_std_heads">
+        <th>الكمية</th>
+        <th>تكلفة الوحدة (<t t-esc="cur"/>)</th>
+        <th>القيمة بالتكلفة (<t t-esc="cur"/>)</th>
+        <th>سعر البيع (<t t-esc="cur"/>)</th>
+        <th>القيمة البيعية (<t t-esc="cur"/>)</th>
+    </template>
+    <template id="report_akshab_std_cells">
+        <td class="num b"><t t-esc="qty(r['qty'])"/> <span class="uom"><t t-esc="r['uom']"/></span></td>
+        <td class="num"><t t-esc="money(r['unit_cost'])"/></td>
+        <td class="num b"><t t-esc="money(r['value'])"/></td>
+        <td class="num"><t t-esc="money(r['price'])"/></td>
+        <td class="num"><t t-esc="money(r['sale_value'])"/></td>
+    </template>
+    <template id="report_akshab_std_totals">
+        <td class="num"><t t-esc="qty(tq)"/></td>
+        <td></td>
+        <td class="num"><t t-esc="money(tv)"/></td>
+        <td></td>
+        <td class="num"><t t-esc="money(tsv)"/></td>
+    </template>
+    <template id="report_akshab_std_heads_c">
+        <th>الكمية</th>
+        <th>تكلفة الوحدة<br/>القيمة بالتكلفة (<t t-esc="cur"/>)</th>
+        <th>سعر البيع<br/>القيمة البيعية (<t t-esc="cur"/>)</th>
+    </template>
+    <template id="report_akshab_std_cells_c">
+        <td class="num b"><t t-esc="qty(r['qty'])"/> <span class="uom"><t t-esc="r['uom']"/></span></td>
+        <td class="num"><div class="muted"><t t-esc="money(r['unit_cost'])"/></div><div class="b"><t t-esc="money(r['value'])"/></div></td>
+        <td class="num"><div class="muted"><t t-esc="money(r['price'])"/></div><div><t t-esc="money(r['sale_value'])"/></div></td>
+    </template>
+    <template id="report_akshab_std_totals_c">
+        <td class="num"><t t-esc="qty(tq)"/></td>
+        <td class="num"><t t-esc="money(tv)"/></td>
+        <td class="num"><t t-esc="money(tsv)"/></td>
+    </template>
+
+    <!-- Branch rebalancing table (shared by the comprehensive and the item-status reports).
+         Expects d, m, k, cur and rows (= limited d['transfers']) -->
+    <template id="report_akshab_transfers_table">
+                <table class="aks-tbl">
+                    <thead>
+                        <tr>
+                            <th class="txt" style="width:24%;">الصنف</th>
+                            <th class="txt">من مستودع</th>
+                            <th>الكمية فيه</th>
+                            <th>أيام بلا بيع فيه</th>
+                            <th class="txt">إلى مستودع</th>
+                            <th>الكمية هناك</th>
+                            <th>متوسط البيع اليومي هناك</th>
+                            <th>تغطيته هناك (يوم)</th>
+                            <th>الكمية المقترح نقلها</th>
+                            <th>قيمتها بالتكلفة (<t t-esc="cur"/>)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="rows" t-as="t">
+                            <tr t-att-class="'z' if t_index % 2 else ''">
+                                <td class="txt"><div class="prod" t-att-dir="'ltr' if t['name_ltr'] else 'rtl'" style="text-align:right;"><t t-esc="t['product']"/></div><div class="sub-line"><t t-esc="t['category']"/></div></td>
+                                <td class="txt b"><t t-esc="t['from_name']"/></td>
+                                <td class="num"><t t-esc="qty(t['from_qty'])"/></td>
+                                <td class="num red"><t t-esc="num(t['from_days_no_sale']) if t['from_days_no_sale'] is not None else 'لم يُبع'"/></td>
+                                <td class="txt b green"><t t-esc="t['to_name']"/></td>
+                                <td class="num"><t t-esc="qty(t['to_qty'])"/></td>
+                                <td class="num"><t t-esc="'%.2f' % t['to_avg_daily']"/></td>
+                                <td class="num"><t t-esc="num(t['to_cover']) if t['to_cover'] is not None else '-'"/></td>
+                                <td class="num b green"><t t-esc="qty(t['qty'])"/></td>
+                                <td class="num b"><t t-esc="money(t['value'])"/></td>
+                            </tr>
+                        </t>
+                        <tr class="total">
+                            <td class="txt" colspan="8">الإجمالي: <t t-esc="d['totals']['transfer_items']"/></td>
+                            <td class="num"><t t-esc="qty(d['totals']['transfer_qty'])"/></td>
+                            <td class="num"><t t-esc="money(k['transfer_value'])"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+    </template>
+
+    <!-- ============================================================ -->
+    <!-- Main document                                                 -->
+    <!-- ============================================================ -->
+    <template id="report_akshab_stock_document">
+        <t t-call="web.html_container">
+            <t t-foreach="reports" t-as="rep">
+                <t t-set="o" t-value="rep['wizard']"/>
+                <t t-set="d" t-value="rep['data']"/>
+                <t t-set="m" t-value="d['meta']"/>
+                <t t-set="k" t-value="d['kpi']"/>
+                <t t-set="cur" t-value="m['currency']"/>
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+                <t t-set="sec" t-value="0"/>
+
+                <!-- Footer (rendered by wkhtmltopdf on every page) -->
+                <div class="footer">
+                    <style type="text/css">
+                        @font-face { font-family: 'Tajawal'; font-style: normal; font-weight: 400;
+                            src: url('/akshab_stock_report/static/fonts/Tajawal-Regular.ttf') format('truetype'); }
+                        @font-face { font-family: 'Tajawal'; font-style: normal; font-weight: 700;
+                            src: url('/akshab_stock_report/static/fonts/Tajawal-Bold.ttf') format('truetype'); }
+                        .aks-footer { direction: ltr; text-align: center; font-family: 'Tajawal', 'DejaVu Sans', Arial, sans-serif;
+                                      font-size: 10.5px; color: #8A8A8A; border: 0; padding: 0; }
+                    </style>
+                    <div class="aks-footer"><span class="page"/> / <span class="topage"/></div>
+                </div>
+
+                <div class="article" t-att-data-oe-model="o._name" t-att-data-oe-id="o.id"
+                     t-att-data-oe-lang="o.env.context.get('lang')">
+                    <t t-call="akshab_stock_report.report_akshab_stock_style"/>
+                    <div class="aks">
+
+                        <!-- ================= Header ================= -->
+                        <table class="aks-head">
+                            <tr>
+                                <td style="width:60%;">
+                                    <div class="aks-title">تقرير المخزون</div>
+                                    <div class="aks-subtitle">INVENTORY STATUS REPORT</div>
+                                </td>
+                                <td class="aks-logo">
+                                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ================= KPI tiles ================= -->
+                        <table class="aks-kpis">
+                            <tr>
+                                <td class="aks-kpi">
+                                    <div class="v"><t t-esc="money(k['total_value'])"/></div>
+                                    <div class="l">قيمة المخزون بالتكلفة (<t t-esc="cur"/>)</div>
+                                </td>
+                                <td class="aks-kpi">
+                                    <div class="v"><t t-esc="num(k['product_count'])"/></div>
+                                    <div class="l">عدد الأصناف بالمخزون</div>
+                                </td>
+                                <td class="aks-kpi">
+                                    <div class="v"><t t-esc="qty(k['total_qty'])"/></div>
+                                    <div class="l">إجمالي الكميات</div>
+                                </td>
+                                <td class="aks-kpi">
+                                    <div class="v"><t t-esc="money(k['active_value'])"/> <span class="s ltr">(<t t-esc="pct(k['active_pct'])"/>)</span></div>
+                                    <div class="l">مخزون نشط (<t t-esc="cur"/>)</div>
+                                </td>
+                                <td class="aks-kpi">
+                                    <div class="v"><t t-esc="money(k['slow_value'])"/> <span class="s ltr">(<t t-esc="pct(k['slow_pct'])"/>)</span></div>
+                                    <div class="l">بطيء الحركة / فائض (<t t-esc="cur"/>)</div>
+                                </td>
+                                <td class="aks-kpi">
+                                    <div class="v red"><t t-esc="money(k['stagnant_value'])"/> <span class="s ltr">(<t t-esc="pct(k['stagnant_pct'])"/>)</span></div>
+                                    <div class="l">مخزون راكد (<t t-esc="cur"/>) — <t t-esc="num(k['stagnant_count'])"/> صنف</div>
+                                </td>
+                                <td class="aks-kpi">
+                                    <div class="v"><t t-esc="num(k['avg_age'])"/> يوم</div>
+                                    <div class="l">متوسط عمر المخزون</div>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <!-- ================= Info table ================= -->
+                        <table class="aks-info">
+                            <tr>
+                                <td class="lbl">تاريخ المخزون</td>
+                                <td class="val"><span class="ltr"><t t-esc="m['date_to_display']"/></span></td>
+                                <td class="lbl">نوع الأرصدة</td>
+                                <td class="val"><t t-esc="m['mode_label']"/></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">المستودعات</td>
+                                <td class="val" colspan="3"><t t-esc="m['warehouses_display']"/></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">الفئات</td>
+                                <td class="val" colspan="3"><t t-esc="m['categories_display']"/><t t-if="m['products_display']"> — <t t-esc="m['products_display']"/></t></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">فترة تحليل المبيعات</td>
+                                <td class="val">من <span class="ltr"><t t-esc="m['sales_from']"/></span> إلى <span class="ltr"><t t-esc="m['sales_to']"/></span> &#8207;(<t t-esc="m['sales_days']"/> يوم)&#8207;</td>
+                                <td class="lbl">معيار الركود</td>
+                                <td class="val">لم يُبع خلال آخر <t t-esc="m['stagnant_days']"/> يوم · بطيء الحركة: تغطية أكثر من <t t-esc="m['slow_cover_days']"/> يوم</td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">مؤشر صحة المخزون</td>
+                                <td class="val">
+                                    <span t-attf-class="aks-health {{ 'b-active' if k['health_score'] >= 75 else ('b-slow' if k['health_score'] >= 50 else 'b-stagnant') }}">
+                                        <t t-esc="num(k['health_score'])"/> / 100
+                                    </span>
+                                    <span> <t t-esc="k['health_label']"/></span>
+                                </td>
+                                <td class="lbl">سيولة متوقعة من خطة التصفية</td>
+                                <td class="val"><span class="b green"><t t-esc="money(k['expected_cash'])"/> <t t-esc="cur"/></span>
+                                    <span class="muted small"> (بخصم يصل إلى <t t-esc="qty(m['liquidation_discount'])"/>% دون البيع تحت التكلفة)</span></td>
+                            </tr>
+                            <tr>
+                                <td class="lbl">معدل دوران المخزون</td>
+                                <td class="val"><span class="b green"><t t-esc="'%.1f' % k['turnover']"/> مرة / سنة</span>
+                                    <span class="muted small"> · أيام المخزون: <t t-esc="num(k['dsi']) if k['dsi'] is not None else '-'"/> يوم (القيمة ÷ تكلفة المبيعات اليومية)</span></td>
+                                <td class="lbl">تاريخ الطباعة</td>
+                                <td class="val"><span class="ltr"><t t-esc="m['print_date']"/></span> · <t t-esc="m['currency_name']"/> · <t t-esc="m['cost_basis_label']"/></td>
+                            </tr>
+                        </table>
+
+                        <!-- ================= Executive quick read ================= -->
+                        <table class="aks-tbl" style="margin-bottom:4px;">
+                            <thead>
+                                <tr><th class="txt">قراءة سريعة للإدارة</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="txt" style="padding:6px 10px; background:#FBF9F4;">
+                                    <ol class="aks-insights">
+                                        <t t-foreach="limit(d['insights'], 5)" t-as="ins"><li><t t-esc="ins"/></li></t>
+                                    </ol>
+                                </td></tr>
+                            </tbody>
+                        </table>
+
+                        <!-- ================= 1. Status summary ================= -->
+                        <t t-set="sec" t-value="sec + 1"/>
+                        <t t-call="akshab_stock_report.report_akshab_stock_section">
+                            <t t-set="title">ملخص حالة المخزون</t>
+                            <t t-set="hint">تصنيف كل صنف حسب حركة بيعه خلال فترة التحليل</t>
+                        </t>
+                        <table class="aks-tbl">
+                            <thead>
+                                <tr>
+                                    <th class="txt" style="width:14%;">الحالة</th>
+                                    <th class="txt">التعريف</th>
+                                    <th style="width:9%;">عدد الأصناف</th>
+                                    <th style="width:9%;">الكمية</th>
+                                    <th style="width:13%;">القيمة بالتكلفة (<t t-esc="cur"/>)</th>
+                                    <th style="width:9%;">النسبة</th>
+                                    <th style="width:18%;">التوزيع</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="d['status_summary']" t-as="s">
+                                    <tr t-att-class="'z' if s_index % 2 else ''">
+                                        <td class="txt"><span t-attf-class="aks-badge b-{{ s['key'] }}"><t t-esc="s['label']"/></span></td>
+                                        <td class="txt muted">
+                                            <t t-if="s['key'] == 'active'">يُباع خلال فترة التحليل وكميته مناسبة لمعدل بيعه</t>
+                                            <t t-if="s['key'] == 'slow'">يُباع لكن كميته تكفي لأكثر من <t t-esc="m['slow_cover_days']"/> يوماً (فائض مخزون)</t>
+                                            <t t-if="s['key'] == 'stagnant'">لم يُسجل له أي بيع خلال آخر <t t-esc="m['stagnant_days']"/> يوماً</t>
+                                            <t t-if="s['key'] == 'new'">استُلم خلال آخر <t t-esc="m['new_days']"/> يوماً ولم يُبع بعد</t>
+                                        </td>
+                                        <td class="num"><t t-esc="num(s['count'])"/></td>
+                                        <td class="num"><t t-esc="qty(s['qty'])"/></td>
+                                        <td class="num"><t t-esc="money(s['value'])"/></td>
+                                        <td class="num ltr"><t t-esc="pct(s['pct'])"/></td>
+                                        <td><t t-call="akshab_stock_report.report_akshab_stock_bar"><t t-set="bar" t-value="s['bar']"/><t t-set="bar_class" t-value="s['bar_class']"/></t></td>
+                                    </tr>
+                                </t>
+                                <tr class="total">
+                                    <td class="txt" colspan="2">الإجمالي</td>
+                                    <td class="num"><t t-esc="num(d['status_total']['count'])"/></td>
+                                    <td class="num"><t t-esc="qty(d['status_total']['qty'])"/></td>
+                                    <td class="num"><t t-esc="money(d['status_total']['value'])"/></td>
+                                    <td class="num ltr">100%</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- ================= 2. Aging ================= -->
+                        <t t-set="sec" t-value="sec + 1"/>
+                        <t t-call="akshab_stock_report.report_akshab_stock_section">
+                            <t t-set="title">أعمار المخزون</t>
+                            <t t-set="hint">عمر الكمية منذ استلامها في المستودع (أساس FIFO: الكمية الحالية تُنسب لآخر الاستلامات)</t>
+                        </t>
+                        <table class="aks-tbl">
+                            <thead>
+                                <tr>
+                                    <th class="txt" style="width:22%;">الفئة العمرية</th>
+                                    <th style="width:12%;">الكمية</th>
+                                    <th style="width:16%;">القيمة بالتكلفة (<t t-esc="cur"/>)</th>
+                                    <th style="width:10%;">النسبة</th>
+                                    <th>التوزيع</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="d['aging']['buckets']" t-as="bk">
+                                    <tr t-att-class="'z' if bk_index % 2 else ''">
+                                        <td t-att-class="'txt b red' if bk['is_old'] else 'txt b'"><t t-esc="bk['label']"/></td>
+                                        <td class="num"><t t-esc="qty(bk['qty'])"/></td>
+                                        <td class="num"><t t-esc="money(bk['value'])"/></td>
+                                        <td class="num ltr"><t t-esc="pct(bk['pct'])"/></td>
+                                        <td><t t-call="akshab_stock_report.report_akshab_stock_bar"><t t-set="bar" t-value="bk['bar']"/><t t-set="bar_class" t-value="bk['bar_class']"/></t></td>
+                                    </tr>
+                                </t>
+                                <tr class="total">
+                                    <td class="txt">الإجمالي <span class="muted" style="font-weight:400;">— متوسط العمر المرجح بالكمية <span class="ltr b"><t t-esc="num(d['aging']['avg_age'])"/></span> يوم، وبالقيمة <span class="ltr b"><t t-esc="num(d['aging']['avg_age_value'])"/></span> يوم</span></td>
+                                    <td class="num"><t t-esc="qty(d['aging']['total_qty'])"/></td>
+                                    <td class="num"><t t-esc="money(d['aging']['total_value'])"/></td>
+                                    <td class="num ltr">100%</td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="aks-note">المخزون الذي يزيد عمره عن <t t-esc="m['old_days']"/> يوماً يمثل <span class="b red ltr"><t t-esc="pct(k['old_pct'])"/></span> من القيمة (<t t-esc="money(k['old_value'])"/> <t t-esc="cur"/>)، ومنه <span class="b red ltr"><t t-esc="pct(k['over_year_pct'])"/></span> أقدم من سنة.</div>
+
+                        <!-- Aging by warehouse -->
+                        <t t-if="m['multi_warehouse'] and d['aging_by_warehouse']['rows']">
+                            <table class="aks-tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="txt">أعمار المخزون حسب المستودع (القيمة بالتكلفة)</th>
+                                        <t t-foreach="m['bucket_labels']" t-as="bl"><th><t t-esc="bl"/></th></t>
+                                        <th>الإجمالي</th>
+                                        <th>نسبة الأقدم من <t t-esc="m['old_days']"/> يوم</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="d['aging_by_warehouse']['rows']" t-as="ag">
+                                        <tr t-att-class="'z' if ag_index % 2 else ''">
+                                            <td class="txt b"><t t-esc="ag['name']"/></td>
+                                            <t t-foreach="ag['values']" t-as="v"><td class="num"><t t-esc="money(v)"/></td></t>
+                                            <td class="num b"><t t-esc="money(ag['total'])"/></td>
+                                            <td class="num ltr" t-att-class="'num ltr red b' if ag['pct_old'] >= 30 else 'num ltr'"><t t-esc="pct(ag['pct_old'])"/></td>
+                                        </tr>
+                                    </t>
+                                    <tr class="total">
+                                        <td class="txt">الإجمالي</td>
+                                        <t t-foreach="d['aging_by_warehouse']['totals']" t-as="v"><td class="num"><t t-esc="money(v)"/></td></t>
+                                        <td class="num"><t t-esc="money(d['aging_by_warehouse']['total'])"/></td>
+                                        <td class="num ltr"><t t-esc="pct(k['old_pct'])"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- Aging by category -->
+                        <t t-if="m['show_category_aging'] and d['aging_by_category']['rows']">
+                            <table class="aks-tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="txt">أعمار المخزون حسب الفئة (القيمة بالتكلفة)</th>
+                                        <t t-foreach="m['bucket_labels']" t-as="bl"><th><t t-esc="bl"/></th></t>
+                                        <th>الإجمالي</th>
+                                        <th>نسبة الأقدم من <t t-esc="m['old_days']"/> يوم</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="d['aging_by_category']['rows']" t-as="ag">
+                                        <tr t-att-class="'z' if ag_index % 2 else ''">
+                                            <td class="txt b"><t t-esc="ag['name']"/></td>
+                                            <t t-foreach="ag['values']" t-as="v"><td class="num"><t t-esc="money(v)"/></td></t>
+                                            <td class="num b"><t t-esc="money(ag['total'])"/></td>
+                                            <td t-att-class="'num ltr red b' if ag['pct_old'] >= 30 else 'num ltr'"><t t-esc="pct(ag['pct_old'])"/></td>
+                                        </tr>
+                                    </t>
+                                    <tr class="total">
+                                        <td class="txt">الإجمالي</td>
+                                        <t t-foreach="d['aging_by_category']['totals']" t-as="v"><td class="num"><t t-esc="money(v)"/></td></t>
+                                        <td class="num"><t t-esc="money(d['aging_by_category']['total'])"/></td>
+                                        <td class="num ltr"><t t-esc="pct(k['old_pct'])"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- ================= 3. By warehouse ================= -->
+                        <t t-if="d['by_warehouse']">
+                            <t t-set="sec" t-value="sec + 1"/>
+                            <t t-call="akshab_stock_report.report_akshab_stock_section">
+                                <t t-set="title">المخزون حسب المستودع</t>
+                                <t t-set="hint">القيمة والحالة ومتوسط العمر في كل مستودع</t>
+                            </t>
+                            <table class="aks-tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="txt">المستودع</th>
+                                        <th>عدد الأصناف</th>
+                                        <th>الكمية</th>
+                                        <th>القيمة (<t t-esc="cur"/>)</th>
+                                        <th>النسبة</th>
+                                        <th>نشط (<t t-esc="cur"/>)</th>
+                                        <th>بطيء الحركة (<t t-esc="cur"/>)</th>
+                                        <th>راكد (<t t-esc="cur"/>)</th>
+                                        <th>نسبة الراكد</th>
+                                        <th>أصناف بلا بيع في المستودع</th>
+                                        <th>مبيعات الفترة (كمية)</th>
+                                        <th>متوسط العمر (يوم)</th>
+                                        <th>دوران سنوي</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="d['by_warehouse']" t-as="bw">
+                                        <tr t-att-class="'z' if bw_index % 2 else ''">
+                                            <td class="txt b"><t t-esc="bw['name']"/></td>
+                                            <td class="num"><t t-esc="num(bw['count'])"/></td>
+                                            <td class="num"><t t-esc="qty(bw['qty'])"/></td>
+                                            <td class="num"><t t-esc="money(bw['value'])"/></td>
+                                            <td class="num ltr"><t t-esc="pct(bw['pct'])"/></td>
+                                            <td class="num"><t t-esc="money(bw['active_value'])"/></td>
+                                            <td class="num"><t t-esc="money(bw['slow_value'])"/></td>
+                                            <td class="num red b"><t t-esc="money(bw['stagnant_value'])"/></td>
+                                            <td class="num ltr"><t t-esc="pct(bw['stagnant_pct'])"/></td>
+                                            <td class="num"><t t-esc="num(bw['idle_count'])"/><span class="muted small"> — <t t-esc="money(bw['idle_value'])"/></span></td>
+                                            <td class="num"><t t-esc="qty(bw['sales_qty'])"/></td>
+                                            <td class="num"><t t-esc="num(bw['avg_age'])"/></td>
+                                            <td class="num"><t t-esc="'%.1f' % bw['turnover']"/></td>
+                                        </tr>
+                                    </t>
+                                    <tr class="total">
+                                        <td class="txt">الإجمالي</td>
+                                        <td class="num"><t t-esc="num(k['product_count'])"/></td>
+                                        <td class="num"><t t-esc="qty(k['total_qty'])"/></td>
+                                        <td class="num"><t t-esc="money(k['total_value'])"/></td>
+                                        <td class="num ltr">100%</td>
+                                        <td class="num"><t t-esc="money(k['active_value'])"/></td>
+                                        <td class="num"><t t-esc="money(k['slow_value'])"/></td>
+                                        <td class="num"><t t-esc="money(k['stagnant_value'])"/></td>
+                                        <td class="num ltr"><t t-esc="pct(k['stagnant_pct'])"/></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="num"><t t-esc="num(k['avg_age'])"/></td>
+                                        <td class="num"><t t-esc="'%.1f' % k['turnover']"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="aks-note">"أصناف بلا بيع في المستودع": أصناف موجودة في المستودع ولم تُبع فيه خلال فترة الركود حتى لو كانت تُباع في مستودع آخر — راجع قسم إعادة التوزيع.</div>
+                        </t>
+
+                        <!-- ================= 4. By category ================= -->
+                        <t t-set="sec" t-value="sec + 1"/>
+                        <t t-call="akshab_stock_report.report_akshab_stock_section">
+                            <t t-set="title">المخزون حسب الفئة</t>
+                            <t t-set="hint">مرتبة تنازلياً حسب القيمة</t>
+                        </t>
+                        <table class="aks-tbl">
+                            <thead>
+                                <tr>
+                                    <th class="txt">الفئة</th>
+                                    <th>عدد الأصناف</th>
+                                    <th>الكمية</th>
+                                    <th>القيمة (<t t-esc="cur"/>)</th>
+                                    <th>النسبة</th>
+                                    <th>نشط (<t t-esc="cur"/>)</th>
+                                    <th>بطيء الحركة (<t t-esc="cur"/>)</th>
+                                    <th>راكد (<t t-esc="cur"/>)</th>
+                                    <th>نسبة الراكد</th>
+                                    <th>أصناف راكدة</th>
+                                    <th>مبيعات الفترة (كمية)</th>
+                                    <th>متوسط العمر (يوم)</th>
+                                    <th>دوران سنوي</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="d['by_category']" t-as="bc">
+                                    <tr t-att-class="'z' if bc_index % 2 else ''">
+                                        <td class="txt b"><t t-esc="bc['name']"/></td>
+                                        <td class="num"><t t-esc="num(bc['count'])"/></td>
+                                        <td class="num"><t t-esc="qty(bc['qty'])"/></td>
+                                        <td class="num"><t t-esc="money(bc['value'])"/></td>
+                                        <td class="num ltr"><t t-esc="pct(bc['pct'])"/></td>
+                                        <td class="num"><t t-esc="money(bc['active_value'])"/></td>
+                                        <td class="num"><t t-esc="money(bc['slow_value'])"/></td>
+                                        <td class="num red b"><t t-esc="money(bc['stagnant_value'])"/></td>
+                                        <td t-att-class="'num ltr red b' if bc['stagnant_pct'] >= 30 else 'num ltr'"><t t-esc="pct(bc['stagnant_pct'])"/></td>
+                                        <td class="num"><t t-esc="num(bc['stagnant_count'])"/></td>
+                                        <td class="num"><t t-esc="qty(bc['sales_qty'])"/></td>
+                                        <td class="num"><t t-esc="num(bc['avg_age'])"/></td>
+                                        <td class="num"><t t-esc="'%.1f' % bc['turnover']"/></td>
+                                    </tr>
+                                </t>
+                                <tr class="total">
+                                    <td class="txt">الإجمالي</td>
+                                    <td class="num"><t t-esc="num(k['product_count'])"/></td>
+                                    <td class="num"><t t-esc="qty(k['total_qty'])"/></td>
+                                    <td class="num"><t t-esc="money(k['total_value'])"/></td>
+                                    <td class="num ltr">100%</td>
+                                    <td class="num"><t t-esc="money(k['active_value'])"/></td>
+                                    <td class="num"><t t-esc="money(k['slow_value'])"/></td>
+                                    <td class="num"><t t-esc="money(k['stagnant_value'])"/></td>
+                                    <td class="num ltr"><t t-esc="pct(k['stagnant_pct'])"/></td>
+                                    <td class="num"><t t-esc="num(k['stagnant_count'])"/></td>
+                                    <td></td>
+                                    <td class="num"><t t-esc="num(k['avg_age'])"/></td>
+                                    <td class="num"><t t-esc="'%.1f' % k['turnover']"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- ================= 5. Stagnant items ================= -->
+                        <t t-set="sec" t-value="sec + 1"/>
+                        <t t-set="rows" t-value="limit(d['stagnant'], m['max_lines'])"/>
+                        <t t-call="akshab_stock_report.report_akshab_stock_section">
+                            <t t-set="title">الأصناف الراكدة وتوصيات التصفية</t>
+                            <t t-set="hint">لم تُبع خلال آخر <t t-esc="m['stagnant_days']"/> يوماً — مرتبة تنازلياً حسب القيمة</t>
+                        </t>
+                        <t t-if="not d['stagnant']">
+                            <div class="aks-note">لا توجد أصناف راكدة ضمن نطاق التقرير.</div>
+                        </t>
+                        <table class="aks-tbl" t-if="d['stagnant']">
+                            <thead>
+                                <tr>
+                                    <th class="txt" style="width:22%;">الصنف</th>
+                                    <th class="txt" style="width:9%;">الفئة</th>
+                                    <t t-call="akshab_stock_report.report_akshab_std_heads_c"/>
+                                    <th>آخر بيع</th>
+                                    <th>أيام بلا بيع</th>
+                                    <th>العمر (يوم)</th>
+                                    <th>أقصى خصم دون خسارة</th>
+                                    <th>سيولة متوقعة بخصم <t t-esc="qty(m['liquidation_discount'])"/>%</th>
+                                    <th style="width:13%;">التوصية</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="rows" t-as="r">
+                                    <tr t-att-class="'z' if r_index % 2 else ''">
+                                        <td class="txt"><t t-call="akshab_stock_report.report_akshab_stock_product_cell"/></td>
+                                        <td class="txt small muted"><t t-esc="r['category']"/></td>
+                                        <t t-call="akshab_stock_report.report_akshab_std_cells_c"/>
+                                        <td class="num ltr"><t t-esc="r['last_sale_str']"/></td>
+                                        <td class="num"><t t-esc="num(r['days_since_sale']) if r['days_since_sale'] is not None else '-'"/></td>
+                                        <td class="num"><t t-esc="num(r['avg_age'])"/></td>
+                                        <td class="num ltr"><t t-esc="pct(r['max_discount'], 0)"/></td>
+                                        <td class="num b green"><t t-esc="money(r['expected_cash'])"/></td>
+                                        <td class="txt"><span t-attf-class="aks-badge b-{{ r['action'] }}"><t t-esc="r['action_label']"/></span></td>
+                                    </tr>
+                                </t>
+                                <tr class="total">
+                                    <td class="txt" colspan="2">الإجمالي: <t t-esc="d['totals']['stagnant_items']"/></td>
+                                    <t t-call="akshab_stock_report.report_akshab_std_totals_c"><t t-set="tq" t-value="d['totals']['stagnant_qty']"/><t t-set="tv" t-value="k['stagnant_value']"/><t t-set="tsv" t-value="sum([r['sale_value'] for r in d['stagnant']])"/></t>
+                                    <td colspan="4"></td>
+                                    <td class="num"><t t-esc="money(k['stagnant_cash'])"/></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="aks-note" t-if="len(rows) &lt; len(d['stagnant'])">عرض أعلى <t t-esc="len(rows)"/> صنفاً من أصل <t t-esc="len(d['stagnant'])"/> حسب القيمة — القائمة الكاملة في ملف الإكسل.</div>
+                        <div class="aks-legend" t-if="d['stagnant']">
+                            <span class="aks-badge b-liquidate">تصفية فورية</span> بلا بيع منذ أكثر من سنة ·
+                            <span class="aks-badge b-discount_high">خصم قوي / عرض حزمة</span> بلا بيع منذ أكثر من 6 أشهر ·
+                            <span class="aks-badge b-discount">عرض ترويجي / خصم</span> بلا بيع منذ <t t-esc="m['stagnant_days']"/> يوم فأكثر ·
+                            "أقصى خصم دون خسارة" = هامش الربح على سعر البيع الحالي.
+                        </div>
+
+                        <!-- ================= 6. Slow movers ================= -->
+                        <t t-if="d['slow']">
+                            <t t-set="sec" t-value="sec + 1"/>
+                            <t t-set="rows" t-value="limit(d['slow'], m['max_lines'])"/>
+                            <t t-call="akshab_stock_report.report_akshab_stock_section">
+                                <t t-set="title">الأصناف بطيئة الحركة (فائض مخزون)</t>
+                                <t t-set="hint">تُباع لكن كميتها تكفي لأكثر من <t t-esc="m['slow_cover_days']"/> يوماً — مرتبة حسب قيمة الفائض</t>
+                            </t>
+                            <table class="aks-tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="txt" style="width:22%;">الصنف</th>
+                                        <th class="txt" style="width:9%;">الفئة</th>
+                                        <t t-call="akshab_stock_report.report_akshab_std_heads_c"/>
+                                        <th>مبيعات الفترة</th>
+                                        <th>متوسط البيع اليومي</th>
+                                        <th>أيام التغطية</th>
+                                        <th>الفائض (كمية)</th>
+                                        <th>قيمة الفائض (<t t-esc="cur"/>)</th>
+                                        <th>سيولة متوقعة من الفائض</th>
+                                        <th style="width:13%;">التوصية</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="rows" t-as="r">
+                                        <tr t-att-class="'z' if r_index % 2 else ''">
+                                            <td class="txt"><t t-call="akshab_stock_report.report_akshab_stock_product_cell"/></td>
+                                            <td class="txt small muted"><t t-esc="r['category']"/></td>
+                                            <t t-call="akshab_stock_report.report_akshab_std_cells_c"/>
+                                            <td class="num"><t t-esc="qty(r['sales_qty'])"/></td>
+                                            <td class="num"><t t-esc="'%.2f' % r['avg_daily']"/></td>
+                                            <td class="num b"><t t-esc="num(r['cover_days'])"/></td>
+                                            <td class="num"><t t-esc="qty(r['excess_qty'])"/></td>
+                                            <td class="num b"><t t-esc="money(r['excess_value'])"/></td>
+                                            <td class="num green b"><t t-esc="money(r['expected_cash'])"/></td>
+                                            <td class="txt"><span t-attf-class="aks-badge b-{{ r['action'] }}"><t t-esc="r['action_label']"/></span></td>
+                                        </tr>
+                                    </t>
+                                    <tr class="total">
+                                        <td class="txt" colspan="2">الإجمالي: <t t-esc="d['totals']['slow_items']"/></td>
+                                        <t t-call="akshab_stock_report.report_akshab_std_totals_c"><t t-set="tq" t-value="d['totals']['slow_qty']"/><t t-set="tv" t-value="k['slow_value']"/><t t-set="tsv" t-value="sum([r['sale_value'] for r in d['slow']])"/></t>
+                                        <td colspan="3"></td>
+                                        <td class="num"><t t-esc="qty(d['totals']['slow_excess_qty'])"/></td>
+                                        <td class="num"><t t-esc="money(d['totals']['slow_excess_value'])"/></td>
+                                        <td class="num"><t t-esc="money(d['totals']['slow_cash'])"/></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="aks-note" t-if="len(rows) &lt; len(d['slow'])">عرض أعلى <t t-esc="len(rows)"/> صنفاً من أصل <t t-esc="len(d['slow'])"/> — القائمة الكاملة في ملف الإكسل.</div>
+                        </t>
+
+                        <!-- ================= New items ================= -->
+                        <t t-if="d['new']">
+                            <t t-set="sec" t-value="sec + 1"/>
+                            <t t-set="rows" t-value="limit(d['new'], m['max_lines'])"/>
+                            <t t-call="akshab_stock_report.report_akshab_stock_section">
+                                <t t-set="title">الأصناف الجديدة (تحت المتابعة)</t>
+                                <t t-set="hint">استُلمت خلال آخر <t t-esc="m['new_days']"/> يوماً ولم تُبع بعد — لا تُعد راكدة</t>
+                            </t>
+                            <table class="aks-tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="txt" style="width:26%;">الصنف</th>
+                                        <th class="txt" style="width:12%;">الفئة</th>
+                                        <t t-call="akshab_stock_report.report_akshab_std_heads"/>
+                                        <th>أول استلام</th>
+                                        <th>أيام منذ الاستلام</th>
+                                        <th style="width:16%;">التوصية</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="rows" t-as="r">
+                                        <tr t-att-class="'z' if r_index % 2 else ''">
+                                            <td class="txt"><t t-call="akshab_stock_report.report_akshab_stock_product_cell"/></td>
+                                            <td class="txt small muted"><t t-esc="r['category']"/></td>
+                                            <t t-call="akshab_stock_report.report_akshab_std_cells"/>
+                                            <td class="num ltr"><t t-esc="r['first_receipt_str']"/></td>
+                                            <td class="num"><t t-esc="num(r['max_age'])"/></td>
+                                            <td class="txt"><span t-attf-class="aks-badge b-{{ r['action'] }}"><t t-esc="r['action_label']"/></span></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </t>
+
+                        <!-- ================= 7. Branch rebalancing ================= -->
+                        <t t-if="d['transfers']">
+                            <t t-set="sec" t-value="sec + 1"/>
+                            <t t-set="rows" t-value="limit(d['transfers'], m['max_lines'])"/>
+                            <t t-call="akshab_stock_report.report_akshab_stock_section">
+                                <t t-set="title">إعادة التوزيع بين المستودعات</t>
+                                <t t-set="hint">مخزون بلا حركة في مستودع بينما يُباع في مستودع آخر — النقل بديل عن التخفيض</t>
+                            </t>
+                            <t t-call="akshab_stock_report.report_akshab_transfers_table"/>
+                        </t>
+
+                        <!-- ================= 8. Active items ================= -->
+                        <t t-if="m['show_active'] and d['active']">
+                            <t t-set="sec" t-value="sec + 1"/>
+                            <t t-set="rows" t-value="limit(d['active'], m['max_lines'])"/>
+                            <t t-call="akshab_stock_report.report_akshab_stock_section">
+                                <t t-set="title">الأصناف النشطة (الأكثر حركة)</t>
+                                <t t-set="hint">مرتبة تنازلياً حسب كمية المبيعات خلال فترة التحليل</t>
+                            </t>
+                            <table class="aks-tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="txt" style="width:24%;">الصنف</th>
+                                        <th class="txt" style="width:10%;">الفئة</th>
+                                        <t t-call="akshab_stock_report.report_akshab_std_heads_c"/>
+                                        <th>مبيعات الفترة</th>
+                                        <th>متوسط البيع اليومي</th>
+                                        <th>أيام التغطية</th>
+                                        <th>آخر بيع</th>
+                                        <th>كمية قادمة</th>
+                                        <th style="width:16%;">التوصية</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="rows" t-as="r">
+                                        <tr t-att-class="'z' if r_index % 2 else ''">
+                                            <td class="txt"><t t-call="akshab_stock_report.report_akshab_stock_product_cell"/></td>
+                                            <td class="txt small muted"><t t-esc="r['category']"/></td>
+                                            <t t-call="akshab_stock_report.report_akshab_std_cells_c"/>
+                                            <td class="num b"><t t-esc="qty(r['sales_qty'])"/></td>
+                                            <td class="num"><t t-esc="'%.2f' % r['avg_daily']"/></td>
+                                            <td t-att-class="'num b red' if (r['cover_days'] is not None and r['cover_days'] &lt;= m['reorder_cover_days']) else 'num'"><t t-esc="num(r['cover_days']) if r['cover_days'] is not None else '-'"/></td>
+                                            <td class="num ltr"><t t-esc="r['last_sale_str']"/></td>
+                                            <td class="num"><t t-esc="qty(r['incoming_qty']) if r['incoming_qty'] else '-'"/></td>
+                                            <td class="txt"><span t-attf-class="aks-badge b-{{ r['action'] }}"><t t-esc="r['action_label']"/></span></td>
+                                        </tr>
+                                    </t>
+                                    <tr class="total">
+                                        <td class="txt" colspan="2">الإجمالي: <t t-esc="d['totals']['active_items']"/></td>
+                                        <t t-call="akshab_stock_report.report_akshab_std_totals_c"><t t-set="tq" t-value="d['totals']['active_qty']"/><t t-set="tv" t-value="k['active_value']"/><t t-set="tsv" t-value="sum([r['sale_value'] for r in d['active']])"/></t>
+                                        <td class="num"><t t-esc="qty(d['totals']['active_sales_qty'])"/></td>
+                                        <td colspan="5"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="aks-note" t-if="len(rows) &lt; len(d['active'])">عرض أعلى <t t-esc="len(rows)"/> صنفاً من أصل <t t-esc="len(d['active'])"/> — القائمة الكاملة في ملف الإكسل.</div>
+                        </t>
+
+                        <!-- ================= 9. Out of stock with demand ================= -->
+                        <t t-if="m['show_out_of_stock'] and d['out']">
+                            <t t-set="sec" t-value="sec + 1"/>
+                            <t t-set="rows" t-value="limit(d['out'], m['max_lines'])"/>
+                            <t t-call="akshab_stock_report.report_akshab_stock_section">
+                                <t t-set="title">أصناف نافدة لها طلب</t>
+                                <t t-set="hint">بيعت خلال فترة التحليل ورصيدها الآن صفر — فرص بيع مفقودة</t>
+                            </t>
+                            <table class="aks-tbl">
+                                <thead>
+                                    <tr>
+                                        <th class="txt" style="width:30%;">الصنف</th>
+                                        <th class="txt" style="width:14%;">الفئة</th>
+                                        <th>مبيعات الفترة</th>
+                                        <th>متوسط البيع اليومي</th>
+                                        <th>آخر بيع</th>
+                                        <th>آخر استلام</th>
+                                        <th>كمية قادمة</th>
+                                        <th>سعر البيع بدون ضريبة</th>
+                                        <th style="width:16%;">التوصية</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="rows" t-as="r">
+                                        <tr t-att-class="'z' if r_index % 2 else ''">
+                                            <td class="txt"><t t-call="akshab_stock_report.report_akshab_stock_product_cell"/></td>
+                                            <td class="txt small muted"><t t-esc="r['category']"/></td>
+                                            <td class="num b"><t t-esc="qty(r['sales_qty'])"/></td>
+                                            <td class="num"><t t-esc="'%.2f' % r['avg_daily']"/></td>
+                                            <td class="num ltr"><t t-esc="r['last_sale_str']"/></td>
+                                            <td class="num ltr"><t t-esc="r['last_receipt_str']"/></td>
+                                            <td class="num"><t t-esc="qty(r['incoming_qty']) if r['incoming_qty'] else '-'"/></td>
+                                            <td class="num"><t t-esc="money(r['price'])"/></td>
+                                            <td class="txt"><span t-attf-class="aks-badge b-{{ r['action'] }}"><t t-esc="r['action_label']"/></span></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div class="aks-note" t-if="len(rows) &lt; len(d['out'])">عرض أعلى <t t-esc="len(rows)"/> صنفاً من أصل <t t-esc="len(d['out'])"/> — القائمة الكاملة في ملف الإكسل.</div>
+                        </t>
+
+                        <!-- ================= 10. Recommendations & plan ================= -->
+                        <t t-set="sec" t-value="sec + 1"/>
+                        <t t-call="akshab_stock_report.report_akshab_stock_section">
+                            <t t-set="title">خلاصة التوصيات وخطة التصفية</t>
+                            <t t-set="hint">ما تحتاجه الإدارة لاتخاذ القرار</t>
+                        </t>
+                        <table class="aks-tbl" t-if="d['plan']['rows']">
+                            <thead>
+                                <tr>
+                                    <th class="txt" style="width:26%;">الإجراء المقترح</th>
+                                    <th>عدد الأصناف</th>
+                                    <th>الكمية</th>
+                                    <th>التكلفة (<t t-esc="cur"/>)</th>
+                                    <th>القيمة بسعر البيع الحالي (<t t-esc="cur"/>)</th>
+                                    <th>السيولة المتوقعة بعد الخصم (<t t-esc="cur"/>)</th>
+                                    <th>نسبة الاسترداد من التكلفة</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="d['plan']['rows']" t-as="pl">
+                                    <tr t-att-class="'z' if pl_index % 2 else ''">
+                                        <td class="txt"><span t-attf-class="aks-badge b-{{ pl['key'] }}"><t t-esc="pl['label']"/></span></td>
+                                        <td class="num"><t t-esc="num(pl['count'])"/></td>
+                                        <td class="num"><t t-esc="qty(pl['qty'])"/></td>
+                                        <td class="num"><t t-esc="money(pl['cost'])"/></td>
+                                        <td class="num"><t t-esc="money(pl['sale_value'])"/></td>
+                                        <td class="num b green"><t t-esc="money(pl['expected_cash'])"/></td>
+                                        <td class="num ltr"><t t-esc="pct(pl['recovery_pct'], 0)"/></td>
+                                    </tr>
+                                </t>
+                                <tr class="total">
+                                    <td class="txt">الإجمالي</td>
+                                    <td class="num"><t t-esc="num(d['plan']['total']['count'])"/></td>
+                                    <td class="num"><t t-esc="qty(d['plan']['total']['qty'])"/></td>
+                                    <td class="num"><t t-esc="money(d['plan']['total']['cost'])"/></td>
+                                    <td class="num"><t t-esc="money(d['plan']['total']['sale_value'])"/></td>
+                                    <td class="num green"><t t-esc="money(d['plan']['total']['expected_cash'])"/></td>
+                                    <td class="num ltr"><t t-esc="pct(d['plan']['total']['recovery_pct'], 0)"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="aks-note" t-if="d['plan']['rows']">السيولة المتوقعة = الكمية × سعر البيع الحالي × (1 − الخصم)، والخصم المطبق لكل صنف هو الأقل بين <t t-esc="qty(m['liquidation_discount'])"/>% وهامش الربح حتى لا يُباع أي صنف تحت التكلفة. للأصناف بطيئة الحركة تُحتسب الكمية الفائضة فقط.</div>
+
+                        <table class="aks-tbl" style="margin-top:8px;">
+                            <thead>
+                                <tr><th class="txt">أبرز النتائج</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="txt" style="padding:8px 10px;">
+                                    <ol class="aks-insights">
+                                        <t t-foreach="d['insights']" t-as="ins"><li><t t-esc="ins"/></li></t>
+                                    </ol>
+                                </td></tr>
+                            </tbody>
+                        </table>
+
+                        <table class="aks-tbl" style="margin-top:8px;">
+                            <thead>
+                                <tr><th class="txt">قرار الإدارة / ملاحظات</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="padding:0;">
+                                    <div class="aks-box">
+                                        <div class="line"/><div class="line"/><div class="line"/><div class="line"/>
+                                    </div>
+                                </td></tr>
+                            </tbody>
+                        </table>
+
+                        <!-- ================= Methodology ================= -->
+                        <t t-set="sec" t-value="sec + 1"/>
+                        <t t-call="akshab_stock_report.report_akshab_stock_section">
+                            <t t-set="title">منهجية الاحتساب</t>
+                            <t t-set="hint">كيف حُسبت الأرقام في هذا التقرير</t>
+                        </t>
+                        <table class="aks-method">
+                            <tr><td class="k">الكميات</td><td>كميات المخزون في المواقع الداخلية للمستودعات المحددة حتى تاريخ التقرير (<t t-esc="m['mode_label']"/>). المبيعات المسجلة دون رصيد كافٍ لا تدخل في الكميات ولا في القيمة ولا في الأعمار، والاستلام اللاحق يغطيها أولاً ولا يُحتسب منه إلا ما تبقى. الأصناف المؤرشفة لا تظهر في التقرير (الأصناف النشطة فقط).</td></tr>
+                            <tr><td class="k">التقييم</td><td><t t-esc="m['cost_basis_label']"/> × الكمية. القيمة البيعية = الكمية × سعر البيع المسجل على الصنف في أودو بدون ضريبة القيمة المضافة (تُستبعد الضريبة تلقائياً إذا كان السعر شاملاً لها).</td></tr>
+                            <tr><td class="k">أعمار المخزون</td><td>العمر <t t-esc="m['aging_scope_label']"/>. تُنسب الكمية الحالية إلى آخر استلامات دخلت النطاق بدءاً من الأحدث (FIFO)، ويُحسب عمر كل جزء من تاريخ استلامه. الكمية التي لا يقابلها استلام مسجل تُنسب لأقدم استلام معروف.</td></tr>
+                            <tr><td class="k">المرتجعات</td><td>المرتجع المرتبط بحركته الأصلية يُعالج على الحركة الأصلية وبتاريخها: مرتجع المشتريات يخفض كمية الاستلام الأصلي نفسه (لا يُعامل كصرف يستهلك أقدم مخزون)، ومرتجع العميل أو مرتجع المستودع يعيد الكمية بعمرها الأصلي ولا يُعد استلاماً جديداً، ويُخصم من مبيعات تاريخ البيع الأصلي (بما في ذلك مرتجعات نقاط البيع المرتبطة بطلبها الأصلي). المرتجع للمورد غير المرتبط بحركة يخفض آخر الاستلامات السابقة له.</td></tr>
+                            <tr><td class="k">حركة البيع</td><td>صافي التسليمات للعملاء (مبيعات − مرتجعات على تاريخ البيع الأصلي) من حركات المخزون خلال فترة التحليل، وتشمل نقاط البيع وأوامر البيع. متوسط البيع اليومي = مبيعات الفترة ÷ <t t-esc="m['sales_days']"/> يوم. أيام التغطية = الكمية ÷ متوسط البيع اليومي.</td></tr>
+                            <tr><td class="k">التصنيف</td><td>نشط: له مبيعات وتغطيته ≤ <t t-esc="m['slow_cover_days']"/> يوم · بطيء الحركة: له مبيعات لكن تغطيته > <t t-esc="m['slow_cover_days']"/> يوم (الفائض = الكمية فوق هذه التغطية) · راكد: بلا بيع خلال آخر <t t-esc="m['stagnant_days']"/> يوم · جديد: استُلم لأول مرة خلال آخر <t t-esc="m['new_days']"/> يوم ولم يُبع بعد · نافد وله طلب: رصيده صفر وبيع خلال الفترة.</td></tr>
+                            <tr><td class="k">التوصيات</td><td>راكد أكثر من سنة: تصفية فورية · أكثر من 6 أشهر: خصم قوي أو عرض حزمة · أقل من ذلك: عرض ترويجي · لم يُبع منذ استلامه وعمره أقل من فترة الركود: متابعة قبل أي خصم · بطيء الحركة: إيقاف الشراء وتصريف الفائض · نشط بتغطية ≤ <t t-esc="m['reorder_cover_days']"/> يوم: إعادة طلب · مخزون بلا حركة في مستودع ويُباع في مستودع آخر: إعادة توزيع بدلاً من التخفيض.</td></tr>
+                            <tr><td class="k">مؤشر صحة المخزون</td><td>100 − (1.5 × نسبة قيمة الراكد) − (0.75 × نسبة قيمة بطيء الحركة). 75 فأكثر جيد · 50–74 مقبول · 30–49 ضعيف · أقل من 30 حرج.</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>
